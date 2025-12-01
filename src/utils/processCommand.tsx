@@ -16,11 +16,12 @@ export const processCommand = (input: string): CommandResponse => {
     const trimmed = input.trim();
     if (!trimmed) return { output: null, type: 'input' };
 
-    // Handle Fork Bomb specifically before standard parsing
+    // Handle Fork Bomb - Immediate Meltdown
     if (trimmed === ':(){ :|:& };:') {
         return {
-            output: 'Nice try. Infinite loops are restricted on this kernel.',
+            output: 'Fork bomb detected. System resources critical.',
             type: 'error',
+            action: { type: 'TRIGGER_MELTDOWN' },
         };
     }
 
@@ -211,6 +212,14 @@ export const processCommand = (input: string): CommandResponse => {
         // --- FUN / SECONDARY COMMANDS ---
 
         case 'sudo':
+            // Easter egg override if they try to sudo rm -rf
+            if (args[0] === 'rm' && args.includes('-rf')) {
+                return {
+                    output: 'Nice try, but even root needs to confirm this. Proceed with destruction? [y/N]',
+                    type: 'error',
+                    action: { type: 'CONFIRM_DESTRUCTION' },
+                };
+            }
             return {
                 output: 'Nice try. You are not root on this system.',
                 type: 'error',
@@ -253,28 +262,33 @@ export const processCommand = (input: string): CommandResponse => {
                 type: 'error',
             };
 
-        // --- DESTRUCTIVE COMMAND MOCKS ---
+        // --- DESTRUCTIVE COMMANDS ---
 
         case 'rm':
-            if (args.includes('-rf') || args.includes('/')) {
+            if (
+                args.includes('-rf') &&
+                (args.includes('/') || args.includes('*'))
+            ) {
                 return {
-                    output: "I'm afraid I can't let you do that, Dave.",
+                    output: 'Warning: You are about to delete critical system files. This action is irreversible. Proceed? [y/N]',
                     type: 'error',
+                    action: { type: 'CONFIRM_DESTRUCTION' },
                 };
             }
             return {
-                output: 'usage: rm [-rf] <path> (But why would you want to?)',
+                output: 'usage: rm [-rf] <path> (Be careful what you wish for...)',
             };
 
         case 'format':
-            if (args[0] === 'c:') {
+            if (args[0] && args[0].toLowerCase().startsWith('c')) {
                 return {
-                    output: "Error: Drive C: is currently in use by 'Universe'.",
+                    output: 'Warning: Formatting drive C: will destroy the universe. Proceed? [y/N]',
                     type: 'error',
+                    action: { type: 'CONFIRM_DESTRUCTION' },
                 };
             }
             return {
-                output: 'format: missing operand',
+                output: 'format: missing operand or drive',
                 type: 'error',
             };
 

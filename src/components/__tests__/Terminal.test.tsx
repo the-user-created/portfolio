@@ -46,4 +46,28 @@ describe('Terminal Component', () => {
         // Expect help output to appear
         expect(screen.getByText('Available commands:')).toBeInTheDocument();
     });
+
+    it('triggers confirmation mode on destructive command', async () => {
+        vi.useFakeTimers();
+        render(<Terminal />);
+
+        // Pass boot
+        act(() => {
+            vi.advanceTimersByTime(3500);
+        });
+        vi.useRealTimers();
+
+        const input = screen.getByRole('textbox');
+
+        // Type destructive command
+        fireEvent.change(input, { target: { value: 'rm -rf /' } });
+        fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
+
+        // Check for warning message
+        expect(
+            await screen.findByText(
+                /Warning: You are about to delete critical system files/i
+            )
+        ).toBeInTheDocument();
+    });
 });

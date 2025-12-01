@@ -76,3 +76,173 @@ body {
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
+
+/* GPU ARTIFACTS */
+.gpu-artifacts {
+    position: relative;
+    overflow: hidden; /* Hide artifacts that go out of bounds */
+}
+
+.gpu-artifacts::before,
+.gpu-artifacts::after {
+    content: '';
+    position: absolute;
+    background: #ff00ff; /* Magenta for a classic glitch color */
+    mix-blend-mode: difference;
+    pointer-events: none;
+    z-index: 999;
+    opacity: var(--artifact-opacity, 0);
+    will-change: transform, width, height;
+}
+
+.gpu-artifacts::before {
+    animation:
+        artifact-pos-1 0.23s infinite steps(1),
+        artifact-shape-1 0.73s infinite steps(1);
+}
+
+.gpu-artifacts::after {
+    animation:
+        artifact-pos-2 0.29s infinite steps(1),
+        artifact-shape-2 0.61s infinite steps(1);
+}
+
+/* Position Keyframes - Jumps around the screen */
+@keyframes artifact-pos-1 {
+    0% {
+        transform: translate(10vw, 20vh);
+    }
+    15% {
+        transform: translate(80vw, 40vh);
+    }
+    30% {
+        transform: translate(30vw, 90vh);
+    }
+    45% {
+        transform: translate(50vw, 10vh);
+    }
+    60% {
+        transform: translate(70vw, 75vh);
+    }
+    75% {
+        transform: translate(20vw, 50vh);
+    }
+    100% {
+        transform: translate(45vw, 30vh);
+    }
+}
+
+@keyframes artifact-pos-2 {
+    0% {
+        transform: translate(90vw, 80vh);
+    }
+    20% {
+        transform: translate(10vw, 10vh);
+    }
+    40% {
+        transform: translate(65vw, 30vh);
+    }
+    60% {
+        transform: translate(25vw, 70vh);
+    }
+    80% {
+        transform: translate(75vw, 5vh);
+    }
+    100% {
+        transform: translate(50vw, 50vh);
+    }
+}
+
+/* Shape Keyframes - Changes size to create "splotches" */
+@keyframes artifact-shape-1 {
+    0% {
+        width: 5px;
+        height: 10px;
+        background: #00ffff;
+    }
+    20% {
+        width: 8px;
+        height: 4px;
+    }
+    40% {
+        width: 3px;
+        height: 15px;
+        background: #ffff00;
+    }
+    60% {
+        width: 12px;
+        height: 6px;
+    }
+    80% {
+        width: 4px;
+        height: 8px;
+        background: #ff00ff;
+    }
+    100% {
+        width: 7px;
+        height: 5px;
+    }
+}
+
+@keyframes artifact-shape-2 {
+    0% {
+        width: 2vw;
+        height: 3vh;
+        background: #ffff00;
+    }
+    25% {
+        width: 1vw;
+        height: 5vh;
+    }
+    50% {
+        width: 4vw;
+        height: 1vh;
+        background: #00ffff;
+    }
+    75% {
+        width: 3vw;
+        height: 2vh;
+    }
+    100% {
+        width: 1vw;
+        height: 4vh;
+        background: #ff00ff;
+    }
+}
+
+/* TEXT GLITCH ANIMATION */
+@keyframes glitch-skew {
+    0% {
+        transform: skew(0deg);
+        opacity: 1;
+    }
+    20% {
+        transform: skew(-10deg);
+        opacity: 0.8;
+    }
+    40% {
+        transform: skew(10deg);
+        opacity: 1;
+    }
+    60% {
+        transform: skew(-5deg);
+        opacity: 0.9;
+    }
+    80% {
+        transform: skew(5deg);
+        opacity: 1;
+    }
+    100% {
+        transform: skew(0deg);
+        opacity: 1;
+    }
+}
+
+.glitch-text {
+    animation: glitch-skew 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both
+        infinite;
+    color: var(--term-error);
+    text-shadow:
+        2px 0 #ff00ff,
+        -2px 0 #00ffff;
+}

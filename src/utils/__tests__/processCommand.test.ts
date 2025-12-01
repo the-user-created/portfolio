@@ -50,7 +50,7 @@ describe('processCommand Utility', () => {
     });
 
     it('mocks sudo access', () => {
-        const result = processCommand('sudo rm -rf');
+        const result = processCommand('sudo ls');
         expect(result.type).toBe('error');
         expect(result.output).toBe(
             'Nice try. You are not root on this system.'
@@ -72,12 +72,30 @@ describe('processCommand Utility', () => {
     it('handles fork bomb attempt', () => {
         const result = processCommand(':(){ :|:& };:');
         expect(result.type).toBe('error');
-        expect(result.output).toContain('Infinite loops are restricted');
+        expect(result.output).toContain('Fork bomb detected');
     });
 
     it('prevents destructive rm commands', () => {
         const result = processCommand('rm -rf /');
         expect(result.type).toBe('error');
-        expect(result.output).toContain("I can't let you do that");
+        expect(result.output).toContain(
+            'Warning: You are about to delete critical system files'
+        );
+    });
+
+    it('triggers confirmation action for rm -rf /', () => {
+        const result = processCommand('rm -rf /');
+        expect(result.action).toEqual({ type: 'CONFIRM_DESTRUCTION' });
+        expect(result.output).toContain('Warning');
+    });
+
+    it('triggers immediate meltdown for fork bomb', () => {
+        const result = processCommand(':(){ :|:& };:');
+        expect(result.action).toEqual({ type: 'TRIGGER_MELTDOWN' });
+    });
+
+    it('triggers confirmation for format c:', () => {
+        const result = processCommand('format c:');
+        expect(result.action).toEqual({ type: 'CONFIRM_DESTRUCTION' });
     });
 });
