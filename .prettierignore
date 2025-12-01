@@ -4,3 +4,11 @@
 # Caches
 .eslintcache
 
+# Next.js
+.next/
+next-env.d.ts
+
+# Other
+venv
+design_docs
+node_modules
