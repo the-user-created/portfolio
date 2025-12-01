@@ -1,0 +1,6 @@
+# PNPM
+**/pnpm-lock.yaml
+
+# Caches
+.eslintcache
+
