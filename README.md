@@ -72,6 +72,7 @@ Once the system boots, type `help` to see a list of available commands.
 | `project <id>` | Shows details for a specific project          |
 | `contact`      | Displays contact information and social links |
 | `resume`       | Generates a download link for the PDF resume  |
+| `open <item>`  | Opens a resource (e.g., `open github`)        |
 | `clear`        | Clears the terminal screen                    |
 
 ### Theming

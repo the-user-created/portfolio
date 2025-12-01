@@ -95,4 +95,37 @@ describe('Terminal Component', () => {
         // Check that the theme attribute has been removed
         expect(document.body).not.toHaveAttribute('data-theme');
     });
+
+    it('navigates command history with arrow keys', async () => {
+        vi.useFakeTimers();
+        render(<Terminal />);
+        act(() => {
+            vi.advanceTimersByTime(3500);
+        });
+        vi.useRealTimers();
+
+        const input = screen.getByRole('textbox');
+
+        // Enter first command
+        fireEvent.change(input, { target: { value: 'help' } });
+        fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
+        await screen.findByText('> help');
+        expect(input).toHaveValue('');
+
+        // Enter second command
+        fireEvent.change(input, { target: { value: 'about' } });
+        fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
+        await screen.findByText('> about');
+        expect(input).toHaveValue('');
+
+        // Navigate history
+        fireEvent.keyDown(input, { key: 'ArrowUp' });
+        expect(input).toHaveValue('about');
+        fireEvent.keyDown(input, { key: 'ArrowUp' });
+        expect(input).toHaveValue('help');
+        fireEvent.keyDown(input, { key: 'ArrowDown' });
+        expect(input).toHaveValue('about');
+        fireEvent.keyDown(input, { key: 'ArrowDown' });
+        expect(input).toHaveValue('');
+    });
 });

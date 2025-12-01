@@ -6,6 +6,7 @@ export const COMMANDS = [
     { cmd: 'contact', desc: 'Display contact information' },
     { cmd: 'resume', desc: 'Download resume' },
     { cmd: 'theme', desc: 'Change terminal theme (try "theme list")' },
+    { cmd: 'open', desc: 'Open a resource (e.g., github, linkedin)' },
     { cmd: 'clear', desc: 'Clear terminal screen' },
 ];
 

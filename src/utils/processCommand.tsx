@@ -178,6 +178,33 @@ export const processCommand = (input: string): CommandResponse => {
                 ),
             };
 
+        case 'open':
+            const resource = args[0];
+            if (!resource) {
+                return {
+                    output: "Usage: open <resource>. Available: 'github', 'linkedin', 'resume'",
+                    type: 'error',
+                };
+            }
+            let url: string;
+            switch (resource.toLowerCase()) {
+                case 'github':
+                    url = `https://${CONTACT.github}`;
+                    window.open(url, '_blank');
+                    return { output: `Opening GitHub: ${url}` };
+                case 'linkedin':
+                    url = `https://${CONTACT.linkedin}`;
+                    window.open(url, '_blank');
+                    return { output: `Opening LinkedIn: ${url}` };
+                case 'resume':
+                    window.open(RESUME_URL, '_blank');
+                    return { output: `Opening resume...` };
+                default:
+                    return {
+                        output: `Resource '${resource}' not found.`,
+                        type: 'error',
+                    };
+            }
         case 'clear':
             return { output: null, action: { type: 'CLEAR' } };
 

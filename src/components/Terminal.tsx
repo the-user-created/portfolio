@@ -27,6 +27,8 @@ const CRITICAL_FILES = [
 export default function Terminal() {
     const [history, setHistory] = useState<TerminalLine[]>([]);
     const [input, setInput] = useState('');
+    const [commandHistory, setCommandHistory] = useState<string[]>([]);
+    const historyPointer = useRef(0);
     const [isBooting, setIsBooting] = useState(true);
     const [theme, setTheme] = useState('default');
 
@@ -236,6 +238,27 @@ export default function Terminal() {
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (commandHistory.length > 0) {
+                const newPointer = Math.max(0, historyPointer.current - 1);
+                historyPointer.current = newPointer;
+                setInput(commandHistory[newPointer] || '');
+            }
+            return;
+        }
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (commandHistory.length > 0) {
+                const newPointer = Math.min(
+                    commandHistory.length,
+                    historyPointer.current + 1
+                );
+                historyPointer.current = newPointer;
+                setInput(commandHistory[newPointer] || ''); // Sets to '' if pointer is at the end
+            }
+            return;
+        }
         if (e.key === 'Enter') {
             const cmd = input.trim();
 
@@ -312,6 +335,13 @@ export default function Terminal() {
                         content: response.output,
                     });
                 }
+            }
+
+            // Add to command history if it's not empty
+            if (cmd) {
+                const newCmdHistory = [...commandHistory, cmd];
+                setCommandHistory(newCmdHistory);
+                historyPointer.current = newCmdHistory.length;
             }
 
             setHistory(newHistory);

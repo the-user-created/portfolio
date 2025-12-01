@@ -98,4 +98,30 @@ describe('processCommand Utility', () => {
         const result = processCommand('format c:');
         expect(result.action).toEqual({ type: 'CONFIRM_DESTRUCTION' });
     });
+
+    describe('open command', () => {
+        const windowOpenSpy = vi
+            .spyOn(window, 'open')
+            .mockImplementation(() => null);
+
+        it('opens github link', () => {
+            processCommand('open github');
+            expect(windowOpenSpy).toHaveBeenCalledWith(
+                'https://github.com/example',
+                '_blank'
+            );
+        });
+
+        it('returns an error for an unknown resource', () => {
+            const result = processCommand('open portfolio');
+            expect(result.type).toBe('error');
+            expect(result.output).toContain("Resource 'portfolio' not found");
+        });
+
+        it('returns usage error if no resource is specified', () => {
+            const result = processCommand('open');
+            expect(result.type).toBe('error');
+            expect(result.output).toContain('Usage: open <resource>');
+        });
+    });
 });
