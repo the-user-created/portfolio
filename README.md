@@ -8,7 +8,7 @@ command-line interface (CLI) to showcase skills, projects, and professional back
 - **Immersive Terminal Simulation**: Complete with boot sequences, typing effects, and a blinking cursor.
 - **Interactive Command System**: navigate the portfolio using commands like `about`, `projects`, and `contact`.
 - **Theming Engine**: Switch between visual styles including Matrix, Solarized, Hacker, and Light mode.
-- **Accessibility First**: Fully navigable via keyboard, screen-reader friendly, and mobile responsive.
+- **Accessibility First**: Fully navigable via keyboard, with a screen-reader friendly, SEO-optimized fallback page.
 - **Modern Tech Stack**: Built on the bleeding edge of the React ecosystem.
 
 ## 🛠️ Technology Stack

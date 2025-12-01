@@ -67,6 +67,13 @@ body {
         color 0.3s ease;
 }
 
+body:not([data-theme]) {
+    background: white;
+    color: #1f2937; /* gray-800 */
+    font-family: var(--font-sans);
+    overflow: auto;
+}
+
 /* Custom scrollbar hiding utility */
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
@@ -245,4 +252,17 @@ body {
     text-shadow:
         2px 0 #ff00ff,
         -2px 0 #00ffff;
+}
+
+/* Accessibility utility */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
 }

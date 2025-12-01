@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { TerminalLine } from '@/types/terminal';
 import { processCommand } from '@/utils/processCommand';
 
@@ -44,9 +45,14 @@ export default function Terminal() {
     const inputRef = useRef<HTMLInputElement>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
 
-    // Apply theme to body
+    // Apply theme to body and clean up on unmount
     useEffect(() => {
         document.body.setAttribute('data-theme', theme);
+
+        // This cleanup function runs when the component unmounts
+        return () => {
+            document.body.removeAttribute('data-theme');
+        };
     }, [theme]);
 
     // Handle Boot Sequence
@@ -337,7 +343,7 @@ export default function Terminal() {
 
     return (
         <div
-            className={`gpu-artifacts h-screen w-full overflow-hidden bg-[var(--term-bg)] p-4 text-base text-[var(--term-text)] transition-colors duration-300 md:p-8 ${isFrozen ? 'brightness-150 contrast-200 invert saturate-0 filter' : ''}`}
+            className={`gpu-artifacts relative h-screen w-full overflow-hidden bg-[var(--term-bg)] p-4 text-base text-[var(--term-text)] transition-colors duration-300 md:p-8 ${isFrozen ? 'brightness-150 contrast-200 invert saturate-0 filter' : ''}`}
             style={
                 {
                     '--artifact-opacity': glitchIntensity >= 2 ? 0.8 : 0,
@@ -345,6 +351,14 @@ export default function Terminal() {
             }
             onClick={handleContainerClick}
         >
+            {/* A discrete link to the standard, non-interactive portfolio page */}
+            <Link
+                href="/boring"
+                className="absolute top-4 right-4 z-10 rounded bg-white/10 px-2 py-1 text-xs text-[var(--term-dim)] transition-colors hover:bg-white/20 hover:text-[var(--term-text)]"
+                aria-label="Switch to standard portfolio view"
+            >
+                Standard View
+            </Link>
             <div
                 ref={scrollRef}
                 className="scrollbar-hide h-full w-full overflow-y-auto"

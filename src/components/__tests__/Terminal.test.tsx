@@ -70,4 +70,29 @@ describe('Terminal Component', () => {
             )
         ).toBeInTheDocument();
     });
+
+    it('renders a link to the boring portfolio page', async () => {
+        vi.useFakeTimers();
+        render(<Terminal />);
+        // Fast-forward past boot sequence
+        act(() => {
+            vi.advanceTimersByTime(3500);
+        });
+        vi.useRealTimers();
+        const boringLink = screen.getByRole('link', {
+            name: /switch to standard portfolio view/i,
+        });
+        expect(boringLink).toBeInTheDocument();
+        expect(boringLink).toHaveAttribute('href', '/boring');
+    });
+    it('cleans up body styles on unmount', () => {
+        // The render function returns an `unmount` method
+        const { unmount } = render(<Terminal />);
+        // Check that the theme attribute is applied on render
+        expect(document.body).toHaveAttribute('data-theme');
+        // Unmount the component to trigger the cleanup effect
+        unmount();
+        // Check that the theme attribute has been removed
+        expect(document.body).not.toHaveAttribute('data-theme');
+    });
 });
