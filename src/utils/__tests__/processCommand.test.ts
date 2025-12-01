@@ -48,4 +48,36 @@ describe('processCommand Utility', () => {
         expect(result.type).toBe('error');
         expect(result.action).toBeUndefined();
     });
+
+    it('mocks sudo access', () => {
+        const result = processCommand('sudo rm -rf');
+        expect(result.type).toBe('error');
+        expect(result.output).toBe(
+            'Nice try. You are not root on this system.'
+        );
+    });
+
+    it('returns a fortune', () => {
+        const result = processCommand('fortune');
+        expect(result.output).toBeDefined();
+        expect(result.type).not.toBe('error');
+    });
+
+    it('activates matrix theme via command', () => {
+        const result = processCommand('matrix');
+        expect(result.action).toEqual({ type: 'SET_THEME', payload: 'matrix' });
+        expect(result.output).toBe('The Matrix has you...');
+    });
+
+    it('handles fork bomb attempt', () => {
+        const result = processCommand(':(){ :|:& };:');
+        expect(result.type).toBe('error');
+        expect(result.output).toContain('Infinite loops are restricted');
+    });
+
+    it('prevents destructive rm commands', () => {
+        const result = processCommand('rm -rf /');
+        expect(result.type).toBe('error');
+        expect(result.output).toContain("I can't let you do that");
+    });
 });

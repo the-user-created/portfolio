@@ -40,6 +40,16 @@
     --term-dim: #586e75;
 }
 
+/* Matrix Theme */
+[data-theme='matrix'] {
+    --term-bg: #000000;
+    --term-text: #00ff00;
+    --term-prompt: #008f11;
+    --term-error: #ff0000;
+    --term-dim: #003b00;
+    text-shadow: 0 0 5px #00ff00;
+}
+
 @theme inline {
     --color-background: var(--background);
     --color-foreground: var(--foreground);

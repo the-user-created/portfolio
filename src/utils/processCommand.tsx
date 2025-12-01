@@ -1,8 +1,11 @@
 import { CommandResponse } from '@/types/terminal';
 import {
     ABOUT,
+    ASCII_CAT,
+    ASCII_HELLO,
     COMMANDS,
     CONTACT,
+    FORTUNES,
     PROJECTS,
     RESUME_URL,
     SKILLS,
@@ -12,6 +15,14 @@ import {
 export const processCommand = (input: string): CommandResponse => {
     const trimmed = input.trim();
     if (!trimmed) return { output: null, type: 'input' };
+
+    // Handle Fork Bomb specifically before standard parsing
+    if (trimmed === ':(){ :|:& };:') {
+        return {
+            output: 'Nice try. Infinite loops are restricted on this kernel.',
+            type: 'error',
+        };
+    }
 
     const parts = trimmed.split(' ');
     const command = parts[0].toLowerCase();
@@ -194,6 +205,76 @@ export const processCommand = (input: string): CommandResponse => {
 
             return {
                 output: "Usage: 'theme list' or 'theme set <name>'",
+                type: 'error',
+            };
+
+        // --- FUN / SECONDARY COMMANDS ---
+
+        case 'sudo':
+            return {
+                output: 'Nice try. You are not root on this system.',
+                type: 'error',
+            };
+
+        case 'fortune':
+            const randomIndex = Math.floor(Math.random() * FORTUNES.length);
+            const randomFortune = FORTUNES[randomIndex];
+
+            return {
+                output: (
+                    <span className="text-[var(--term-prompt)] italic">
+                        &#34;{randomFortune}&#34;
+                    </span>
+                ),
+            };
+
+        case 'matrix':
+            return {
+                output: 'The Matrix has you...',
+                action: { type: 'SET_THEME', payload: 'matrix' },
+            };
+
+        case 'hello':
+        case 'hi':
+            return {
+                output: <pre className="text-xs leading-3">{ASCII_HELLO}</pre>,
+            };
+
+        case 'cat':
+            if (args[0] === 'cat.jpg' || !args[0]) {
+                return {
+                    output: (
+                        <pre className="text-xs leading-3">{ASCII_CAT}</pre>
+                    ),
+                };
+            }
+            return {
+                output: `cat: ${args[0]}: No such file or directory`,
+                type: 'error',
+            };
+
+        // --- DESTRUCTIVE COMMAND MOCKS ---
+
+        case 'rm':
+            if (args.includes('-rf') || args.includes('/')) {
+                return {
+                    output: "I'm afraid I can't let you do that, Dave.",
+                    type: 'error',
+                };
+            }
+            return {
+                output: 'usage: rm [-rf] <path> (But why would you want to?)',
+            };
+
+        case 'format':
+            if (args[0] === 'c:') {
+                return {
+                    output: "Error: Drive C: is currently in use by 'Universe'.",
+                    type: 'error',
+                };
+            }
+            return {
+                output: 'format: missing operand',
                 type: 'error',
             };
 

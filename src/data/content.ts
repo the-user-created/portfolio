@@ -57,4 +57,30 @@ export const CONTACT = {
 
 export const RESUME_URL = '/resume.pdf';
 
-export const THEMES = ['default', 'hacker', 'solarized', 'light'];
+export const THEMES = ['default', 'hacker', 'solarized', 'light', 'matrix'];
+
+export const FORTUNES = [
+    'A bug in the code is worth two in the documentation.',
+    'It works on my machine.',
+    "There are 10 types of people in the world: those who understand binary, and those who don't.",
+    'Deleted code is debugged code.',
+    'Computers make very fast, very accurate mistakes.',
+    "One man's constant is another man's variable.",
+    'Real programmers count from 0.',
+];
+
+export const ASCII_CAT = `
+  /\\_/\\  (
+ ( ^.^ ) _)
+   \\"/  (
+ ( | | )
+(__d b__)
+`;
+
+export const ASCII_HELLO = `
+  _          _ _
+ | |__   ___| | | ___
+ | '_ \\ / _ \\ | |/ _ \\
+ | | | |  __/ | | (_) |
+ |_| |_|\\___|_|_|\\___/
+`;
