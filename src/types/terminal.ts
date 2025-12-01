@@ -2,14 +2,19 @@ import { ReactNode } from 'react';
 
 export type LineType = 'input' | 'output' | 'error' | 'system';
 
+export type TerminalAction =
+    | { type: 'CLEAR' }
+    | { type: 'SET_THEME'; payload: string };
+
 export interface TerminalLine {
-  id: string;
-  type: LineType;
-  content: ReactNode;
-  timestamp?: Date;
+    id: string;
+    type: LineType;
+    content: ReactNode;
+    timestamp?: Date;
 }
 
 export interface CommandResponse {
-  output: ReactNode;
-  type?: LineType;
+    output: ReactNode;
+    type?: LineType;
+    action?: TerminalAction;
 }

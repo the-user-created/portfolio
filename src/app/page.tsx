@@ -1,9 +1,9 @@
 import Terminal from '@/components/Terminal';
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between">
-      <Terminal />
-    </main>
-  );
+    return (
+        <main className="flex min-h-screen flex-col items-center justify-between">
+            <Terminal />
+        </main>
+    );
 }

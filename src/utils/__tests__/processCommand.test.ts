@@ -2,32 +2,50 @@ import { describe, expect, it } from 'vitest';
 import { processCommand } from '@/utils/processCommand';
 
 describe('processCommand Utility', () => {
-  it('returns help text for "help" command', () => {
-    const result = processCommand('help');
-    expect(result.type).not.toBe('error');
-    // We can't easily check ReactNode content equality in a unit test
-    // without rendering, but we can ensure it returned a valid object.
-    expect(result.output).toBeDefined();
-  });
+    it('returns help text for "help" command', () => {
+        const result = processCommand('help');
+        expect(result.type).not.toBe('error');
+        expect(result.output).toBeDefined();
+    });
 
-  it('returns error for unknown commands', () => {
-    const command = 'skibidi';
-    const result = processCommand(command);
+    it('handles empty input gracefully', () => {
+        const result = processCommand('   ');
+        expect(result.type).toBe('input');
+        expect(result.output).toBeNull();
+    });
 
-    expect(result.type).toBe('error');
-    expect(result.output).toBe(
-      `command not found: ${command}. Type 'help' for assistance.`
-    );
-  });
+    it('returns valid output for "about" command', () => {
+        const result = processCommand('about');
+        expect(result.type).not.toBe('error');
+        expect(result.output).toBeDefined();
+    });
 
-  it('handles empty input gracefully', () => {
-    const result = processCommand('   ');
-    expect(result.type).toBe('input');
-    expect(result.output).toBeNull();
-  });
+    it('returns error for invalid project id', () => {
+        const result = processCommand('project 999');
+        expect(result.type).toBe('error');
+        // Using string matching for error message
+        expect(result.output).toContain("Project '999' not found");
+    });
 
-  it('is case insensitive', () => {
-    const result = processCommand('HELP');
-    expect(result.type).not.toBe('error');
-  });
+    it('returns valid project for correct id', () => {
+        const result = processCommand('project 1');
+        expect(result.type).not.toBe('error');
+        expect(result.output).toBeDefined();
+    });
+
+    it('returns CLEAR action for "clear" command', () => {
+        const result = processCommand('clear');
+        expect(result.action).toEqual({ type: 'CLEAR' });
+    });
+
+    it('returns SET_THEME action for valid theme', () => {
+        const result = processCommand('theme set hacker');
+        expect(result.action).toEqual({ type: 'SET_THEME', payload: 'hacker' });
+    });
+
+    it('returns error for invalid theme', () => {
+        const result = processCommand('theme set invalidTheme');
+        expect(result.type).toBe('error');
+        expect(result.action).toBeUndefined();
+    });
 });

@@ -32,30 +32,30 @@ command-line interface (CLI) to showcase skills, projects, and professional back
 
 1. **Clone the repository:**
 
-   ```bash
-   git clone https://github.com/the-user-created/portfolio.git
-   cd portfolio
-   ```
+    ```bash
+    git clone https://github.com/the-user-created/portfolio.git
+    cd portfolio
+    ```
 
 2. **Install dependencies:**
 
-   ```bash
-   pnpm install
-   ```
+    ```bash
+    pnpm install
+    ```
 
 3. **Run the development server:**
 
-   ```bash
-   pnpm dev
-   ```
+    ```bash
+    pnpm dev
+    ```
 
-   Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+    Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 4. **Run Tests:**
 
-   ```bash
-   pnpm test
-   ```
+    ```bash
+    pnpm test
+    ```
 
 ## ⌨️ Usage
 
