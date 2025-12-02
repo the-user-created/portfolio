@@ -40,6 +40,7 @@ export default function Terminal() {
     const [inputMode, setInputMode] = useState<'standard' | 'confirmation'>(
         'standard'
     );
+
     // State for autocomplete
     const [suggestions, setSuggestions] = useState<string[]>([]);
     const [suggestionIndex, setSuggestionIndex] = useState(0);
@@ -351,11 +352,13 @@ export default function Terminal() {
                 setIsRecovering(false); // Recovery is complete
                 setIsSabotageProof(true); // Prevent future meltdowns
             }, 3000);
+
             timeouts.push(finalTimeout);
 
             return () => timeouts.forEach(clearTimeout);
         }
     }, [isRecovering]);
+
     // Matrix Animation Timer Effect
     useEffect(() => {
         if (isMatrixAnimating) {
@@ -412,6 +415,7 @@ export default function Terminal() {
             }
             return;
         }
+
         if (e.key === 'ArrowDown') {
             e.preventDefault();
             if (commandHistory.length > 0) {
@@ -424,12 +428,14 @@ export default function Terminal() {
             }
             return;
         }
+
         if (e.key === 'Enter') {
             // Reset autocomplete state before processing command
             if (suggestions.length > 0) {
                 setSuggestions([]);
                 setSuggestionIndex(0);
             }
+
             const cmd = input.trim();
 
             // Handle Confirmation Mode
@@ -480,6 +486,7 @@ export default function Terminal() {
 
             if (cmd) {
                 const response = processCommand(cmd, { isSabotageProof });
+
                 if (response.action) {
                     if (response.action.type === 'CLEAR') {
                         setHistory([]);
@@ -493,6 +500,7 @@ export default function Terminal() {
                         setTheme(response.action.payload);
                     }
                     if (response.action.type === 'TRIGGER_MATRIX') {
+                        inputRef.current?.blur();
                         setTheme('matrix');
                         setIsMatrixAnimating(true);
                     }

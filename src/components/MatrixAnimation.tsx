@@ -16,7 +16,6 @@ const MatrixAnimation: React.FC = () => {
         let drops: number[] = [];
         let fontSize = 16;
 
-        // Katakana characters, numbers, and symbols for the matrix rain
         const katakana =
             'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
         const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -24,42 +23,43 @@ const MatrixAnimation: React.FC = () => {
         const characters = katakana + latin + nums;
 
         const resizeCanvas = () => {
-            // Handle High-DPI displays (Retina) to prevent blurry/stretched text
             const dpr = window.devicePixelRatio || 1;
             const width = window.innerWidth;
             const height = window.innerHeight;
 
-            // Set internal resolution matches physical pixels
-            canvas.width = width * dpr;
-            canvas.height = height * dpr;
+            const targetWidth = width * dpr;
+            const targetHeight = height * dpr;
 
-            // Enforce CSS display size matches viewport logic pixels
+            // 1. DOM UPDATE: Only resize canvas if physical dimensions changed.
+            const needsResize =
+                canvas.width !== targetWidth || canvas.height !== targetHeight;
+
+            if (needsResize) {
+                canvas.width = targetWidth;
+                canvas.height = targetHeight;
+                ctx.scale(dpr, dpr);
+            }
+
+            // 2. CSS UPDATE: Always ensure style matches viewport
             canvas.style.width = `${width}px`;
             canvas.style.height = `${height}px`;
 
-            // Scale all drawing operations by DPR so we can work in logic pixels
-            ctx.scale(dpr, dpr);
-
-            // Responsive font sizing: 14px on mobile to reduce "cramped" feeling, 16px on desktop
+            // 3. SIMULATION UPDATE: Always calculate simulation parameters.
+            // We CANNOT return early above, because 'drops' is local state that
+            // might be empty on a re-mount even if the DOM element was preserved.
             fontSize = width < 768 ? 14 : 16;
-
-            // Calculate number of columns based on width and font size
             const columns = Math.floor(width / fontSize);
 
-            // Initialize or adjust drops array
-            // If drops is empty (first run), start everything at the top (1)
-            // to create the "curtain" or "blanket waterfall" effect.
             if (drops.length === 0) {
+                // Initial fill (Curtain Effect)
                 drops = [];
                 for (let x = 0; x < columns; x++) {
                     drops[x] = 1;
                 }
             } else {
-                // Handle resize: preserve existing drops, fill new columns
+                // Resize (Responsive): Adjust array size, preserving existing drops
                 const newDrops = [];
                 for (let x = 0; x < columns; x++) {
-                    // If a column existed before, keep its position to prevent restart.
-                    // If it's a new column, start it at the top.
                     newDrops[x] = drops[x] !== undefined ? drops[x] : 1;
                 }
                 drops = newDrops;
@@ -68,11 +68,25 @@ const MatrixAnimation: React.FC = () => {
 
         // Initial setup
         resizeCanvas();
+
+        // Listeners
         window.addEventListener('resize', resizeCanvas);
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', resizeCanvas);
+        }
+
+        // Safety Poll: Ensures canvas snaps to full height after keyboard dismissal.
+        // Because of the 'needsResize' check above, this will NO LONGER wipe the
+        // canvas repeatedly, fixing the "glitchy curtain" issue.
+        let checks = 0;
+        const resizeCheckInterval = setInterval(() => {
+            resizeCanvas();
+            checks++;
+            if (checks > 20) clearInterval(resizeCheckInterval);
+        }, 100);
 
         const draw = () => {
-            // Semi-transparent black background to create the fading trail effect
-            // Use logical dimensions for fillRect due to ctx.scale
+            // Semi-transparent black background for trails
             ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
             ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
@@ -84,10 +98,9 @@ const MatrixAnimation: React.FC = () => {
                     Math.floor(Math.random() * characters.length)
                 );
 
-                // Draw the character
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
-                // Reset drop to the top randomly to make the rain uneven after the first pass
+                // Reset drop to top randomly
                 if (
                     drops[i] * fontSize > window.innerHeight &&
                     Math.random() > 0.975
@@ -95,7 +108,6 @@ const MatrixAnimation: React.FC = () => {
                     drops[i] = 0;
                 }
 
-                // Move drop down
                 drops[i]++;
             }
         };
@@ -109,6 +121,13 @@ const MatrixAnimation: React.FC = () => {
 
         return () => {
             window.removeEventListener('resize', resizeCanvas);
+            if (window.visualViewport) {
+                window.visualViewport.removeEventListener(
+                    'resize',
+                    resizeCanvas
+                );
+            }
+            clearInterval(resizeCheckInterval);
             cancelAnimationFrame(animationFrameId);
         };
     }, []);
@@ -116,7 +135,7 @@ const MatrixAnimation: React.FC = () => {
     return (
         <canvas
             ref={canvasRef}
-            className="absolute top-0 left-0 block bg-black"
+            className="fixed inset-0 z-50 block bg-black"
             data-testid="matrix-animation-canvas"
         ></canvas>
     );
