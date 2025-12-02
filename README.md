@@ -63,17 +63,17 @@ Once the system boots, type `help` to see a list of available commands.
 
 ### Core Commands
 
-| Command        | Description                                   |
-| :------------- | :-------------------------------------------- |
-| `help`         | Displays the list of available commands       |
-| `about`        | Information about the developer               |
-| `skills`       | Lists technical capabilities and stacks       |
-| `projects`     | Displays a list of featured work              |
-| `project <id>` | Shows details for a specific project          |
-| `contact`      | Displays contact information and social links |
-| `resume`       | Generates a download link for the PDF resume  |
-| `open <item>`  | Opens a resource (e.g., `open github`)        |
-| `clear`        | Clears the terminal screen                    |
+| Command        | Synonyms     | Description                                   |
+| :------------- | :----------- | :-------------------------------------------- |
+| `help`         |              | Displays the list of available commands       |
+| `about`        | `whoami`     | Information about the developer               |
+| `skills`       |              | Lists technical capabilities and stacks       |
+| `projects`     | `ls`, `list` | Displays a list of featured work              |
+| `project <id>` | `cd <id>`    | Shows details for a specific project          |
+| `contact`      |              | Displays contact information and social links |
+| `resume`       |              | Generates a download link for the PDF resume  |
+| `open <item>`  |              | Opens a resource (e.g., `open github`)        |
+| `clear`        | `cls`        | Clears the terminal screen                    |
 
 ### Theming
 

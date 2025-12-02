@@ -3,6 +3,7 @@ import {
     ABOUT,
     ASCII_CAT,
     ASCII_HELLO,
+    COMMAND_SYNONYMS,
     COMMANDS,
     CONTACT,
     FORTUNES,
@@ -38,7 +39,9 @@ export const processCommand = (
     const command = parts[0].toLowerCase();
     const args = parts.slice(1);
 
-    switch (command) {
+    const resolvedCommand = COMMAND_SYNONYMS[command] || command;
+
+    switch (resolvedCommand) {
         case 'help':
             return {
                 output: (
@@ -51,6 +54,8 @@ export const processCommand = (
                                 <li key={c.cmd}>
                                     <span className="font-bold text-[var(--term-text)]">
                                         {c.cmd}
+                                        {c.synonyms &&
+                                            ` (${c.synonyms.join(', ')})`}
                                     </span>{' '}
                                     <span className="text-[var(--term-dim)]">
                                         - {c.desc}

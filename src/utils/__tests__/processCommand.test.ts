@@ -102,6 +102,32 @@ describe('processCommand Utility', () => {
         expect(result.action).toEqual({ type: 'CONFIRM_DESTRUCTION' });
     });
 
+    describe('Command Synonyms', () => {
+        it('resolves "ls" to the "projects" command', () => {
+            const result = processCommand('ls');
+            expect(result.type).not.toBe('error');
+            // A simple check to ensure it didn't fall through to the default case
+            expect(result.output).toBeDefined();
+        });
+
+        it('resolves "cd 1" to the "project 1" command', () => {
+            const result = processCommand('cd 1');
+            expect(result.type).not.toBe('error');
+            expect(result.output).toBeDefined();
+        });
+
+        it('resolves "whoami" to the "about" command', () => {
+            const result = processCommand('whoami');
+            expect(result.type).not.toBe('error');
+            expect(result.output).toBeDefined();
+        });
+
+        it('resolves "cls" to the "clear" command action', () => {
+            const result = processCommand('cls');
+            expect(result.action).toEqual({ type: 'CLEAR' });
+        });
+    });
+
     describe('with sabotage proofing enabled', () => {
         const options = { isSabotageProof: true };
 

@@ -1,15 +1,36 @@
 export const COMMANDS = [
     { cmd: 'help', desc: 'List available commands' },
-    { cmd: 'about', desc: 'Display information about me' },
+    {
+        cmd: 'about',
+        desc: 'Display information about me',
+        synonyms: ['whoami'],
+    },
     { cmd: 'skills', desc: 'List technical skills' },
-    { cmd: 'projects', desc: 'View project portfolio' },
+    {
+        cmd: 'projects',
+        desc: 'View project portfolio',
+        synonyms: ['ls', 'list'],
+    },
+    {
+        cmd: 'project',
+        desc: 'Shows details for a specific project',
+        synonyms: ['cd'],
+    },
     { cmd: 'contact', desc: 'Display contact information' },
     { cmd: 'resume', desc: 'Download resume' },
     { cmd: 'theme', desc: 'Change terminal theme (try "theme list")' },
     { cmd: 'open', desc: 'Open a resource (e.g., github, linkedin)' },
     { cmd: 'matrix', desc: 'Wake up, Neo...' },
-    { cmd: 'clear', desc: 'Clear terminal screen' },
+    { cmd: 'clear', desc: 'Clear terminal screen', synonyms: ['cls'] },
 ];
+
+export const COMMAND_SYNONYMS: { [key: string]: string } = {
+    ls: 'projects',
+    list: 'projects',
+    cd: 'project',
+    whoami: 'about',
+    cls: 'clear',
+};
 
 export const ABOUT = {
     name: 'Developer',
