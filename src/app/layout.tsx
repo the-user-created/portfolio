@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { ABOUT, CONTACT } from '@/data/content';
+import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 import React from 'react';
 
@@ -53,6 +54,8 @@ export default function RootLayout({
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
                 {children}
+
+                <Analytics />
             </body>
         </html>
     );
