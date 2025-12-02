@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { TerminalLine } from '@/types/terminal';
 import { processCommand } from '@/utils/processCommand';
-import { BOOT_LOGS } from '@/data/bootLogs';
+import { BOOT_LOGS, BootLogLine } from '@/data/bootLogs';
 
 const CRITICAL_FILES = [
     '/bin/kernel',
@@ -16,6 +16,13 @@ const CRITICAL_FILES = [
     '/sys/firmware/efi',
     '/proc/kcore',
     '/boot/vmlinuz',
+];
+
+// Abbreviated boot sequence for repeat visits in the same session
+const FAST_BOOT_LOGS: BootLogLine[] = [
+    { text: '[INFO] Resuming session...', delay: 50 },
+    { text: '[ OK ] System checks complete.', delay: 100 },
+    { text: '[INFO] Welcome back to PortfolioOS.', delay: 200 },
 ];
 
 export default function Terminal() {
@@ -61,6 +68,9 @@ export default function Terminal() {
 
     // Handle Boot Sequence
     useEffect(() => {
+        const hasBooted = sessionStorage.getItem('hasBooted');
+        const bootSequence = hasBooted ? FAST_BOOT_LOGS : BOOT_LOGS;
+
         if (bootStartTime.current === 0) {
             bootStartTime.current = performance.now();
         }
@@ -69,7 +79,7 @@ export default function Terminal() {
         let lineIndex = 0;
 
         const processBootLog = () => {
-            if (lineIndex >= BOOT_LOGS.length) {
+            if (lineIndex >= bootSequence.length) {
                 setIsBooting(false);
                 setHistory((prev) => [
                     ...prev,
@@ -79,10 +89,13 @@ export default function Terminal() {
                         content: "Type 'help' to begin.",
                     },
                 ]);
+                // Set flag only after the first full boot completes
+                if (!hasBooted) {
+                    sessionStorage.setItem('hasBooted', 'true');
+                }
                 return;
             }
-
-            const currentLine = BOOT_LOGS[lineIndex];
+            const currentLine = bootSequence[lineIndex];
             const elapsed = (performance.now() - bootStartTime.current) / 1000;
             const timestamp = `[${elapsed.toFixed(6).padStart(12, ' ')}] `;
             setHistory((prev) => [

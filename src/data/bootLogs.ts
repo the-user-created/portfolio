@@ -69,7 +69,7 @@ export const BOOT_LOGS: BootLogLine[] = [
     {
         text: 'kernel: ACPI: Using ACPI (MADT) for SMP configuration information',
     },
-    { text: 'kernel: smp: Bringing up secondary CPUs ...', delay: 150 },
+    { text: 'kernel: smp: Bringing up secondary CPUs ...', delay: 100 },
     { text: 'kernel: smp: Brought up 1 node, 12 CPUs' },
     {
         text: 'kernel: smpboot: Total of 12 processors activated (84003.36 BogoMIPS)',
@@ -86,7 +86,7 @@ export const BOOT_LOGS: BootLogLine[] = [
         text: 'kernel: PCI: ECAM [mem 0xf0000000-0xf7ffffff] (base 0xf0000000) for domain 0000 [bus 00-7f]',
     },
     { text: 'kernel: ACPI: [Firmware Bug]: BIOS _OSI(Linux) query ignored' },
-    { text: 'kernel: ACPI: Interpreter enabled', delay: 200 },
+    { text: 'kernel: ACPI: Interpreter enabled', delay: 120 },
     { text: 'kernel: ACPI: PM: (supports S0 S3 S4 S5)' },
     { text: 'kernel: ACPI: Using IOAPIC for interrupt routing' },
     {
@@ -117,7 +117,7 @@ export const BOOT_LOGS: BootLogLine[] = [
     { text: 'kernel: usbcore: registered new device driver usb' },
     {
         text: 'kernel: Trying to unpack rootfs image as initramfs...',
-        delay: 250,
+        delay: 150,
     },
     { text: 'kernel: Freeing initrd memory: 79372K' },
     { text: 'kernel: AMD-Vi: Interrupt remapping enabled' },
@@ -408,7 +408,7 @@ export const BOOT_LOGS: BootLogLine[] = [
     { text: 'systemd[1]: Started gdm.service - GNOME Display Manager.' },
     {
         text: 'systemd[1]: Reached target graphical.target - Graphical Interface.',
-        delay: 400,
+        delay: 250,
     },
     { text: 'systemd[1]: Starting Terminus Login Service...' },
     {
@@ -435,19 +435,19 @@ export const BOOT_LOGS: BootLogLine[] = [
     {
         text: '[WARN] Found potentially destructive modules: rm, format, sudo. Sandboxing enabled.',
     },
-    { text: '[INFO] Command interpreter ready.', delay: 200 },
+    { text: '[INFO] Command interpreter ready.', delay: 120 },
     { text: '[INFO] Initializing display server...' },
     { text: '[INFO] Detected display: 1920x1080@144Hz (G-SYNC)' },
     { text: '[INFO] Activating renderer: React DOM v19.2.0' },
-    { text: '[INFO] Applying default theme...', delay: 150 },
+    { text: '[INFO] Applying default theme...', delay: 100 },
     { text: '[INFO] Display server initialized.' },
     { text: '[INFO] Starting system services...' },
     { text: '[ OK ] Started History Service.' },
     { text: '[ OK ] Started Input Service.' },
-    { text: '[ OK ] Started Theming Engine.' },
+    { text: ' [OK ] Started Theming Engine.' },
     { text: '[ OK ] Started Meltdown Prevention Daemon.' },
     { text: '[ OK ] Started ASCII Cat Renderer.' },
-    { text: '[ OK ] All services started.', delay: 200 },
+    { text: '[ OK ] All services started.', delay: 150 },
     { text: '[INFO] System checks complete. No errors found.' },
-    { text: '[INFO] Welcome to PortfolioOS.', delay: 800 },
+    { text: '[INFO] Welcome to PortfolioOS.', delay: 500 },
 ];
