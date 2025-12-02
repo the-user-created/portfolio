@@ -68,8 +68,6 @@ export const VOLUNTEER = VOLUNTEER_DATA;
 export const AWARDS = AWARDS_DATA;
 export const INTERESTS = INTERESTS_DATA;
 
-export const RESUME_URL = '/resume.pdf';
-
 export const THEMES = ['default', 'hacker', 'solarized', 'light', 'matrix'];
 
 export const ASCII_CAT = `

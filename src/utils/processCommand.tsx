@@ -1,3 +1,4 @@
+import dynamic from 'next/dynamic';
 import { CommandResponse } from '@/types/terminal';
 import {
     ABOUT,
@@ -12,7 +13,6 @@ import {
     FORTUNES,
     INTERESTS,
     PROJECTS,
-    RESUME_URL,
     SKILLS,
     THEMES,
     VOLUNTEER,
@@ -41,6 +41,20 @@ const PlayStoreIcon = () => (
         <title>Google Play</title>
         <path d="M22.018 13.298l-3.919 2.218-3.515-3.493 3.543-3.521 3.891 2.202a1.49 1.49 0 0 1 0 2.594zM1.337.924a1.486 1.486 0 0 0-.112.568v21.017c0 .217.045.419.124.6l11.155-11.087L1.337.924zm12.207 10.065l3.258-3.238L3.45.195a1.466 1.466 0 0 0-.946-.179l11.04 10.973zm0 2.067l-11 10.933c.298.036.612-.016.906-.183l13.324-7.54-3.23-3.21z" />
     </svg>
+);
+
+// Dynamic import for the Resume Downloader to avoid loading @react-pdf/renderer
+// in the main bundle. This keeps the initial load fast.
+const ResumeDownloader = dynamic(
+    () => import('@/components/ResumeDownloader'),
+    {
+        loading: () => (
+            <span className="text-[var(--term-dim)]">
+                Loading PDF Engine...
+            </span>
+        ),
+        ssr: false, // PDF generation is client-side only
+    }
 );
 
 export const processCommand = (
@@ -546,26 +560,14 @@ export const processCommand = (
 
         case 'resume':
             return {
-                output: (
-                    <div>
-                        <span>Generating download link... </span>
-                        <a
-                            href={RESUME_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-[var(--term-prompt)] underline hover:no-underline"
-                        >
-                            Click here to download resume
-                        </a>
-                    </div>
-                ),
+                output: <ResumeDownloader />,
             };
 
         case 'open':
             const resource = args[0];
             if (!resource) {
                 return {
-                    output: "Usage: open <resource>. Available: 'github', 'linkedin', 'resume'",
+                    output: "Usage: open <resource>. Available: 'github', 'linkedin'",
                     type: 'error',
                 };
             }
@@ -579,9 +581,6 @@ export const processCommand = (
                     url = `https://${CONTACT.linkedin}`;
                     window.open(url, '_blank');
                     return { output: `Opening LinkedIn: ${url}` };
-                case 'resume':
-                    window.open(RESUME_URL, '_blank');
-                    return { output: `Opening resume...` };
                 default:
                     return {
                         output: `Resource '${resource}' not found.`,

@@ -1,5 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import BoringPortfolioPage from '../page';
 import {
     ABOUT,
@@ -10,6 +10,16 @@ import {
     SKILLS,
     VOLUNTEER,
 } from '@/data/content';
+
+// Mock next/dynamic to bypass the loading state and render a dummy button synchronously.
+// This ensures the test finds the "Download Resume" button immediately.
+vi.mock('next/dynamic', () => ({
+    default: () => {
+        const MockComponent = () => <button>Download Resume</button>;
+        MockComponent.displayName = 'LoadableComponent';
+        return MockComponent;
+    },
+}));
 
 describe('BoringPortfolioPage', () => {
     it('renders all main sections of the portfolio', () => {
@@ -151,7 +161,6 @@ describe('BoringPortfolioPage', () => {
 
     it('renders awards and volunteer links correctly', () => {
         render(<BoringPortfolioPage />);
-
         // Check Awards links
         AWARDS.forEach((award) => {
             if (award.link) {
@@ -173,5 +182,13 @@ describe('BoringPortfolioPage', () => {
                 expect(screen.getByText(vol.organization)).toBeInTheDocument();
             }
         });
+    });
+
+    it('renders the resume download button', () => {
+        render(<BoringPortfolioPage />);
+        const resumeBtn = screen.getByRole('button', {
+            name: /download resume/i,
+        });
+        expect(resumeBtn).toBeInTheDocument();
     });
 });

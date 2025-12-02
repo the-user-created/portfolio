@@ -9,6 +9,14 @@ describe('processCommand Utility', () => {
         expect(result.output).toBeDefined();
     });
 
+    it('returns a valid component output for "resume"', () => {
+        const result = processCommand('resume');
+        expect(result.type).not.toBe('error');
+        expect(result.output).toBeDefined();
+        // Since we return a React Node (dynamic component), we verify it's not null
+        expect(result.output).not.toBeNull();
+    });
+
     it('handles empty input gracefully', () => {
         const result = processCommand('   ');
         expect(result.type).toBe('input');

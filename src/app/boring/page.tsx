@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import BoringResumeButton from '@/components/BoringResumeButton';
 import {
     ABOUT,
     AWARDS,
@@ -7,7 +8,6 @@ import {
     EDUCATION,
     EXPERIENCE,
     PROJECTS,
-    RESUME_URL,
     SKILLS,
     VOLUNTEER,
 } from '@/data/content';
@@ -386,14 +386,7 @@ export default function BoringPortfolioPage() {
                         >
                             Email Me
                         </a>
-                        <a
-                            href={RESUME_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="rounded-lg border border-black px-6 py-3 font-medium text-black transition-colors hover:bg-gray-100"
-                        >
-                            Download Resume
-                        </a>
+                        <BoringResumeButton />
                     </div>
                 </section>
             </main>

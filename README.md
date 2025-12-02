@@ -63,17 +63,22 @@ Once the system boots, type `help` to see a list of available commands.
 
 ### Core Commands
 
-| Command        | Synonyms     | Description                                   |
-| :------------- | :----------- | :-------------------------------------------- |
-| `help`         |              | Displays the list of available commands       |
-| `about`        | `whoami`     | Information about the developer               |
-| `skills`       |              | Lists technical capabilities and stacks       |
-| `projects`     | `ls`, `list` | Displays a list of featured work              |
-| `project <id>` | `cd <id>`    | Shows details for a specific project          |
-| `contact`      |              | Displays contact information and social links |
-| `resume`       |              | Generates a download link for the PDF resume  |
-| `open <item>`  |              | Opens a resource (e.g., `open github`)        |
-| `clear`        | `cls`        | Clears the terminal screen                    |
+| Command        | Synonyms      | Description                                   |
+| :------------- | :------------ | :-------------------------------------------- |
+| `help`         |               | Displays the list of available commands       |
+| `about`        | `whoami`      | Information about the developer               |
+| `experience`   | `exp`, `work` | Work history                                  |
+| `education`    | `edu`         | Academic background                           |
+| `skills`       |               | Lists technical capabilities and stacks       |
+| `projects`     | `ls`, `list`  | Displays a list of featured work              |
+| `project <id>` | `cd <id>`     | Shows details for a specific project          |
+| `volunteer`    |               | Community service and volunteering            |
+| `awards`       |               | Honors and achievements                       |
+| `interests`    |               | Hobbies and off-clock activities              |
+| `contact`      |               | Displays contact information and social links |
+| `resume`       |               | Generates a download link for the PDF resume  |
+| `theme`        |               | Change terminal theme                         |
+| `clear`        | `cls`         | Clears the terminal screen                    |
 
 ### Theming
 
