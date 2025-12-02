@@ -244,8 +244,19 @@ export default function Terminal() {
         }
     }, [isRecovering]);
 
-    // Focus input on click anywhere
-    const handleContainerClick = () => {
+    // Focus input on click anywhere, unless a text selection is being made.
+    const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        // Do not interfere if the user is selecting text
+        const selection = window.getSelection();
+        if (selection && selection.toString().length > 0) {
+            return;
+        }
+
+        // Do not interfere if the click is on an interactive element like a link
+        if ((e.target as HTMLElement).tagName.toLowerCase() === 'a') {
+            return;
+        }
+
         if (!isBooting && inputRef.current) {
             inputRef.current.focus();
         }

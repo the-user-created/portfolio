@@ -125,4 +125,58 @@ describe('Terminal Component', () => {
         fireEvent.keyDown(input, { key: 'ArrowDown' });
         expect(input).toHaveValue('');
     });
+
+    it('handles focus correctly on click, preserving text selection', async () => {
+        vi.useFakeTimers();
+        // Render the component and a dummy button to reliably control focus
+        const { container } = render(
+            <>
+                <Terminal />
+                <button>Focus Stealer</button>
+            </>
+        );
+        act(() => {
+            vi.runAllTimers(); // Finish booting
+        });
+        vi.useRealTimers();
+
+        const input = screen.getByRole('textbox');
+        const terminalContainer = container.querySelector(
+            '.gpu-artifacts'
+        ) as HTMLElement;
+        const focusStealerButton = screen.getByRole('button', {
+            name: /focus stealer/i,
+        });
+
+        // --- SCENARIO 1: Simple click should focus input ---
+        // Explicitly focus another element to ensure loss of focus
+        focusStealerButton.focus();
+        expect(input).not.toHaveFocus();
+
+        fireEvent.click(terminalContainer); // Click the main container
+        expect(input).toHaveFocus();
+
+        // --- SCENARIO 2: Click should NOT focus input if text is selected ---
+        focusStealerButton.focus();
+        expect(input).not.toHaveFocus();
+
+        // Simulate a text selection
+        const textToSelect = screen.getByText(/Type 'help' to begin/i);
+        const selection = window.getSelection();
+        if (selection) {
+            const range = document.createRange();
+            range.selectNodeContents(textToSelect);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+
+        expect(window.getSelection()?.toString()).toContain('help');
+
+        // Click again. This time, it should *not* focus due to the selection.
+        fireEvent.click(terminalContainer);
+        expect(input).not.toHaveFocus();
+
+        // Clean up selection for next test
+        window.getSelection()?.removeAllRanges();
+    });
 });
