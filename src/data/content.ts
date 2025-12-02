@@ -30,6 +30,7 @@ export interface Project {
     stack: string[];
     details?: string;
     link?: string;
+    github?: string;
 }
 
 export const PROJECTS: Project[] = [
@@ -40,6 +41,7 @@ export const PROJECTS: Project[] = [
         stack: ['Next.js', 'TypeScript', 'Tailwind'],
         details:
             'A fully functional terminal emulator in the browser. Features command history, theming, and a filesystem-like navigation structure.',
+        github: 'https://github.com/the-user-created/portfolio',
     },
     {
         id: '2',
@@ -48,6 +50,8 @@ export const PROJECTS: Project[] = [
         stack: ['React', 'Node.js', 'Socket.io'],
         details:
             'Provided live sales metrics and inventory tracking using WebSockets for instant updates.',
+        link: 'https://demo.example.com/dashboard',
+        github: 'https://github.com/example/dashboard',
     },
 ];
 

@@ -44,6 +44,7 @@ export default function Terminal() {
     const [isCrashed, setIsCrashed] = useState(false);
     const [isFrozen, setIsFrozen] = useState(false);
     const [isRecovering, setIsRecovering] = useState(false);
+    const [isSabotageProof, setIsSabotageProof] = useState(false);
     const [recoveryText, setRecoveryText] = useState(''); // State for recovery animation text
 
     const inputRef = useRef<HTMLInputElement>(null);
@@ -251,6 +252,7 @@ export default function Terminal() {
                 ]);
                 setIsBooting(false); // Re-enable input
                 setIsRecovering(false); // Recovery is complete
+                setIsSabotageProof(true); // Prevent future meltdowns
             }, 3000);
             timeouts.push(finalTimeout);
 
@@ -365,8 +367,7 @@ export default function Terminal() {
             const newHistory = [...history, inputLine];
 
             if (cmd) {
-                const response = processCommand(cmd);
-
+                const response = processCommand(cmd, { isSabotageProof });
                 if (response.action) {
                     if (response.action.type === 'CLEAR') {
                         setHistory([]);

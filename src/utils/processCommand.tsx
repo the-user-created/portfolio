@@ -12,11 +12,20 @@ import {
     THEMES,
 } from '@/data/content';
 
-export const processCommand = (input: string): CommandResponse => {
+export const processCommand = (
+    input: string,
+    options: { isSabotageProof?: boolean } = {}
+): CommandResponse => {
     const trimmed = input.trim();
     if (!trimmed) return { output: null, type: 'input' };
 
     // Handle Fork Bomb - Immediate Meltdown
+    if (options.isSabotageProof && trimmed === ':(){ :|:& };:') {
+        return {
+            output: 'Note: destructive commands are disabled on this system.',
+            type: 'system',
+        };
+    }
     if (trimmed === ':(){ :|:& };:') {
         return {
             output: 'Fork bomb detected. System resources critical.',
@@ -146,6 +155,30 @@ export const processCommand = (input: string): CommandResponse => {
                             <span className="font-bold">Tech Stack:</span>{' '}
                             {project.stack.join(', ')}
                         </div>
+                        {(project.github || project.link) && (
+                            <div className="mt-2 flex gap-4">
+                                {project.github && (
+                                    <a
+                                        href={project.github}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-[var(--term-prompt)] underline hover:no-underline"
+                                    >
+                                        GitHub
+                                    </a>
+                                )}
+                                {project.link && (
+                                    <a
+                                        href={project.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-[var(--term-prompt)] underline hover:no-underline"
+                                    >
+                                        Demo
+                                    </a>
+                                )}
+                            </div>
+                        )}
                     </div>
                 ),
             };
@@ -154,9 +187,37 @@ export const processCommand = (input: string): CommandResponse => {
             return {
                 output: (
                     <div className="flex flex-col gap-1">
-                        <span>Email: {CONTACT.email}</span>
-                        <span>GitHub: {CONTACT.github}</span>
-                        <span>LinkedIn: {CONTACT.linkedin}</span>
+                        <div>
+                            Email:{' '}
+                            <a
+                                href={`mailto:${CONTACT.email}`}
+                                className="text-[var(--term-prompt)] underline hover:no-underline"
+                            >
+                                {CONTACT.email}
+                            </a>
+                        </div>
+                        <div>
+                            GitHub:{' '}
+                            <a
+                                href={`https://${CONTACT.github}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-[var(--term-prompt)] underline hover:no-underline"
+                            >
+                                {CONTACT.github}
+                            </a>
+                        </div>
+                        <div>
+                            LinkedIn:{' '}
+                            <a
+                                href={`https://${CONTACT.linkedin}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-[var(--term-prompt)] underline hover:no-underline"
+                            >
+                                {CONTACT.linkedin}
+                            </a>
+                        </div>
                     </div>
                 ),
             };
@@ -241,6 +302,12 @@ export const processCommand = (input: string): CommandResponse => {
         case 'sudo':
             // Easter egg override if they try to sudo rm -rf
             if (args[0] === 'rm' && args.includes('-rf')) {
+                if (options.isSabotageProof) {
+                    return {
+                        output: 'Note: destructive commands are disabled on this system.',
+                        type: 'system',
+                    };
+                }
                 return {
                     output: 'Nice try, but even root needs to confirm this. Proceed with destruction? [y/N]',
                     type: 'error',
@@ -296,6 +363,12 @@ export const processCommand = (input: string): CommandResponse => {
                 args.includes('-rf') &&
                 (args.includes('/') || args.includes('*'))
             ) {
+                if (options.isSabotageProof) {
+                    return {
+                        output: 'Note: destructive commands are disabled on this system.',
+                        type: 'system',
+                    };
+                }
                 return {
                     output: 'Warning: You are about to delete critical system files. This action is irreversible. Proceed? [y/N]',
                     type: 'error',
@@ -308,6 +381,12 @@ export const processCommand = (input: string): CommandResponse => {
 
         case 'format':
             if (args[0] && args[0].toLowerCase().startsWith('c')) {
+                if (options.isSabotageProof) {
+                    return {
+                        output: 'Note: destructive commands are disabled on this system.',
+                        type: 'system',
+                    };
+                }
                 return {
                     output: 'Warning: Formatting drive C: will destroy the universe. Proceed? [y/N]',
                     type: 'error',

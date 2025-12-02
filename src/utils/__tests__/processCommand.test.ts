@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { processCommand } from '@/utils/processCommand';
 
 describe('processCommand Utility', () => {
@@ -100,6 +100,42 @@ describe('processCommand Utility', () => {
     it('triggers confirmation for format c:', () => {
         const result = processCommand('format c:');
         expect(result.action).toEqual({ type: 'CONFIRM_DESTRUCTION' });
+    });
+
+    describe('with sabotage proofing enabled', () => {
+        const options = { isSabotageProof: true };
+
+        it('prevents rm -rf /', () => {
+            const result = processCommand('rm -rf /', options);
+            expect(result.action).toBeUndefined();
+            expect(result.output).toContain(
+                'destructive commands are disabled'
+            );
+        });
+
+        it('prevents fork bomb', () => {
+            const result = processCommand(':(){ :|:& };:', options);
+            expect(result.action).toBeUndefined();
+            expect(result.output).toContain(
+                'destructive commands are disabled'
+            );
+        });
+
+        it('prevents format c:', () => {
+            const result = processCommand('format c:', options);
+            expect(result.action).toBeUndefined();
+            expect(result.output).toContain(
+                'destructive commands are disabled'
+            );
+        });
+
+        it('prevents sudo rm -rf', () => {
+            const result = processCommand('sudo rm -rf /', options);
+            expect(result.action).toBeUndefined();
+            expect(result.output).toContain(
+                'destructive commands are disabled'
+            );
+        });
     });
 
     describe('open command', () => {
