@@ -4,13 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { TerminalLine } from '@/types/terminal';
 import { processCommand } from '@/utils/processCommand';
-
-const BOOT_SEQUENCE = [
-    { text: 'booting portfolioOS v1.0...', delay: 500 },
-    { text: 'loading modules: help...', delay: 1200 },
-    { text: 'initializing display...', delay: 2000 },
-    { text: 'system ready.', delay: 2500 },
-];
+import { BOOT_LOGS } from '@/data/bootLogs';
 
 const CRITICAL_FILES = [
     '/bin/kernel',
@@ -46,6 +40,14 @@ export default function Terminal() {
 
     const inputRef = useRef<HTMLInputElement>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
+    const lineIdCounter = useRef(0);
+    const bootStartTime = useRef(0);
+
+    // Helper to generate unique IDs for terminal lines
+    const getUniqueId = (prefix: string = 'line'): string => {
+        lineIdCounter.current++;
+        return `${prefix}-${lineIdCounter.current}`;
+    };
 
     // Apply theme to body and clean up on unmount
     useEffect(() => {
@@ -59,38 +61,50 @@ export default function Terminal() {
 
     // Handle Boot Sequence
     useEffect(() => {
-        const timeouts: NodeJS.Timeout[] = [];
+        if (bootStartTime.current === 0) {
+            bootStartTime.current = performance.now();
+        }
 
-        BOOT_SEQUENCE.forEach((step, index) => {
-            const timeout = setTimeout(() => {
+        let timeoutId: NodeJS.Timeout;
+        let lineIndex = 0;
+
+        const processBootLog = () => {
+            if (lineIndex >= BOOT_LOGS.length) {
+                setIsBooting(false);
                 setHistory((prev) => [
                     ...prev,
                     {
-                        id: `boot-${index}`,
+                        id: getUniqueId('init-help'),
                         type: 'system',
-                        content: step.text,
+                        content: "Type 'help' to begin.",
                     },
                 ]);
+                return;
+            }
 
-                // End boot sequence after last step
-                if (index === BOOT_SEQUENCE.length - 1) {
-                    setTimeout(() => {
-                        setIsBooting(false);
-                        setHistory((prev) => [
-                            ...prev,
-                            {
-                                id: 'init-help',
-                                type: 'system',
-                                content: "Type 'help' to begin.",
-                            },
-                        ]);
-                    }, 500);
-                }
-            }, step.delay);
-            timeouts.push(timeout);
-        });
+            const currentLine = BOOT_LOGS[lineIndex];
+            const elapsed = (performance.now() - bootStartTime.current) / 1000;
+            const timestamp = `[${elapsed.toFixed(6).padStart(12, ' ')}] `;
+            setHistory((prev) => [
+                ...prev,
+                {
+                    id: getUniqueId('boot'),
+                    type: 'system',
+                    content: timestamp + currentLine.text,
+                },
+            ]);
 
-        return () => timeouts.forEach(clearTimeout);
+            lineIndex++;
+
+            const delay =
+                currentLine.delay ?? Math.floor(Math.random() * 15) + 5;
+
+            timeoutId = setTimeout(processBootLog, delay);
+        };
+
+        timeoutId = setTimeout(processBootLog, 100);
+
+        return () => clearTimeout(timeoutId);
     }, []);
 
     // Auto-scroll to bottom
@@ -124,7 +138,7 @@ export default function Terminal() {
                 }
 
                 // Calculate delay and intensity based on progress
-                let currentDelay = 50;
+                let currentDelay: number;
 
                 if (step < 12) {
                     // Stage 0: Initial rapid deletion (Normal)
@@ -156,7 +170,7 @@ export default function Terminal() {
                     setHistory((prev) => [
                         ...prev,
                         {
-                            id: `meltdown-${Date.now()}-${step}`,
+                            id: getUniqueId('meltdown'),
                             type: 'error',
                             content:
                                 step < 12
@@ -215,7 +229,7 @@ export default function Terminal() {
             const finalTimeout = setTimeout(() => {
                 setHistory([
                     {
-                        id: 'reboot-msg',
+                        id: getUniqueId('reboot-msg'),
                         type: 'system',
                         content:
                             'System recovered. Destructive commands disabled by administrator.',
@@ -265,7 +279,7 @@ export default function Terminal() {
             // Handle Confirmation Mode
             if (inputMode === 'confirmation') {
                 const responseLine: TerminalLine = {
-                    id: Date.now().toString() + '-input',
+                    id: getUniqueId('input'),
                     type: 'input',
                     content: `> ${input}`,
                 };
@@ -275,7 +289,7 @@ export default function Terminal() {
                         ...prev,
                         responseLine,
                         {
-                            id: 'init-meltdown',
+                            id: getUniqueId('init-meltdown'),
                             type: 'error',
                             content: 'INITIATING SYSTEM WIPE...',
                         },
@@ -288,7 +302,7 @@ export default function Terminal() {
                         ...prev,
                         responseLine,
                         {
-                            id: 'abort-meltdown',
+                            id: getUniqueId('abort-meltdown'),
                             type: 'system',
                             content: 'Action cancelled.',
                         },
@@ -301,7 +315,7 @@ export default function Terminal() {
 
             // Standard Command Processing
             const inputLine: TerminalLine = {
-                id: Date.now().toString() + '-input',
+                id: getUniqueId('input'),
                 type: 'input',
                 content: `> ${input}`,
             };
@@ -330,7 +344,7 @@ export default function Terminal() {
 
                 if (response.output) {
                     newHistory.push({
-                        id: Date.now().toString() + '-output',
+                        id: getUniqueId('output'),
                         type: response.type || 'output',
                         content: response.output,
                     });

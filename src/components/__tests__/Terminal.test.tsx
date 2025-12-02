@@ -13,29 +13,24 @@ describe('Terminal Component', () => {
 
     it('renders boot sequence initially', async () => {
         render(<Terminal />);
-
-        // Check for boot message
-        // Note: We use findBy because boot messages appear asynchronously
-        const bootMsg = await screen.findByText('booting portfolioOS v1.0...');
+        // Check for an initial boot message
+        const bootMsg = await screen.findByText(/Linux version/i);
         expect(bootMsg).toBeInTheDocument();
     });
 
-    it('allows user input after boot', async () => {
+    it('allows user input after boot completes', async () => {
         vi.useFakeTimers();
         render(<Terminal />);
 
-        // Fast-forward past boot sequence (2500ms + 500ms internal delay)
-        // Advancing 3500ms ensures we are safely past all timeouts
+        // Fast-forward through the entire recursive boot sequence
+        // We use runAllTimers because the boot sequence uses recursive setTimeouts
         act(() => {
-            vi.advanceTimersByTime(3500);
+            vi.runAllTimers();
         });
 
-        // Switch back to real timers.
-        // RTL's async utilities (findBy) and user events rely on real system time.
-        // If we stay on fake timers, they might hang/timeout waiting for clock ticks.
         vi.useRealTimers();
 
-        // Check if input appears
+        // Check if input appears (this confirms boot is done)
         const input = screen.getByRole('textbox');
         expect(input).toBeInTheDocument();
 
@@ -53,12 +48,12 @@ describe('Terminal Component', () => {
 
         // Pass boot
         act(() => {
-            vi.advanceTimersByTime(3500);
+            vi.runAllTimers();
         });
+
         vi.useRealTimers();
 
         const input = screen.getByRole('textbox');
-
         // Type destructive command
         fireEvent.change(input, { target: { value: 'rm -rf /' } });
         fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
@@ -74,11 +69,14 @@ describe('Terminal Component', () => {
     it('renders a link to the boring portfolio page', async () => {
         vi.useFakeTimers();
         render(<Terminal />);
+
         // Fast-forward past boot sequence
         act(() => {
-            vi.advanceTimersByTime(3500);
+            vi.runAllTimers();
         });
+
         vi.useRealTimers();
+
         const boringLink = screen.getByRole('link', {
             name: /switch to standard portfolio view/i,
         });
@@ -100,12 +98,11 @@ describe('Terminal Component', () => {
         vi.useFakeTimers();
         render(<Terminal />);
         act(() => {
-            vi.advanceTimersByTime(3500);
+            vi.runAllTimers();
         });
         vi.useRealTimers();
 
         const input = screen.getByRole('textbox');
-
         // Enter first command
         fireEvent.change(input, { target: { value: 'help' } });
         fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
