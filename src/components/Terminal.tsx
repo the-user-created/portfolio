@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { TerminalLine } from '@/types/terminal';
 import { processCommand } from '@/utils/processCommand';
@@ -28,6 +29,7 @@ const FAST_BOOT_LOGS: BootLogLine[] = [
 ];
 
 export default function Terminal() {
+    const router = useRouter();
     const [history, setHistory] = useState<TerminalLine[]>([]);
     const [input, setInput] = useState('');
     const [commandHistory, setCommandHistory] = useState<string[]>([]);
@@ -38,11 +40,14 @@ export default function Terminal() {
     const [inputMode, setInputMode] = useState<'standard' | 'confirmation'>(
         'standard'
     );
-    // New state for autocomplete
+    // State for autocomplete
     const [suggestions, setSuggestions] = useState<string[]>([]);
     const [suggestionIndex, setSuggestionIndex] = useState(0);
 
+    const [isExiting, setIsExiting] = useState(false);
+
     const [isMatrixAnimating, setIsMatrixAnimating] = useState(false);
+
     // Meltdown State Machine
     const [isMeltdown, setIsMeltdown] = useState(false);
     const [glitchIntensity, setGlitchIntensity] = useState(0); // 0=None, 1=Text, 2=Screen
@@ -110,6 +115,16 @@ export default function Terminal() {
             document.body.removeAttribute('data-theme');
         };
     }, [theme]);
+
+    // Exit Sequence Effect
+    useEffect(() => {
+        if (isExiting) {
+            const timer = setTimeout(() => {
+                router.push('/boring');
+            }, 1500); // 1.5s delay to show the logout screen
+            return () => clearTimeout(timer);
+        }
+    }, [isExiting, router]);
 
     // Handle Boot Sequence
     useEffect(() => {
@@ -444,6 +459,9 @@ export default function Terminal() {
                         setInput('');
                         return;
                     }
+                    if (response.action.type === 'EXIT_SESSION') {
+                        setIsExiting(true);
+                    }
                     if (response.action.type === 'SET_THEME') {
                         setTheme(response.action.payload);
                     }
@@ -482,6 +500,20 @@ export default function Terminal() {
 
     if (isMatrixAnimating) {
         return <MatrixAnimation />;
+    }
+
+    // Render "Connection Closed" screen during exit
+    if (isExiting) {
+        return (
+            <div className="flex h-screen w-full flex-col items-center justify-center bg-black text-[var(--term-dim)]">
+                <div className="mb-4 text-xl">
+                    Connection to remote host closed.
+                </div>
+                <div className="animate-pulse text-sm">
+                    Redirecting to standard interface...
+                </div>
+            </div>
+        );
     }
 
     if (isCrashed) {

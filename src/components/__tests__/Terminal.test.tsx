@@ -5,6 +5,14 @@ import Terminal from '@/components/Terminal';
 // Mock scrolling since jsdom doesn't support layout measurement perfectly
 window.HTMLElement.prototype.scrollIntoView = vi.fn();
 
+// Mock Next.js router
+const pushMock = vi.fn();
+vi.mock('next/navigation', () => ({
+    useRouter: () => ({
+        push: pushMock,
+    }),
+}));
+
 describe('Terminal Component', () => {
     // Ensure we always start/end with real timers
     afterEach(() => {
@@ -323,5 +331,34 @@ describe('Terminal Component', () => {
 
         // 3. Should NOT have focused the input (user is copying text)
         expect(input).not.toHaveFocus();
+    });
+
+    it('handles the exit command and redirects', async () => {
+        vi.useFakeTimers();
+        render(<Terminal />);
+
+        // Fast-forward through boot sequence
+        await act(async () => {
+            vi.runAllTimers();
+        });
+
+        const input = screen.getByRole('textbox');
+
+        // Type 'exit' and hit enter
+        fireEvent.change(input, { target: { value: 'exit' } });
+        fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
+
+        // Check for immediate visual feedback (Exit Screen)
+        expect(
+            screen.getByText(/Connection to remote host closed/i)
+        ).toBeInTheDocument();
+
+        // Fast forward the 1.5s delay
+        await act(async () => {
+            vi.advanceTimersByTime(1500);
+        });
+
+        // Verify router push was called with correct path
+        expect(pushMock).toHaveBeenCalledWith('/boring');
     });
 });

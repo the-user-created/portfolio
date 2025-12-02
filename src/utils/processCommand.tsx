@@ -591,6 +591,12 @@ export const processCommand = (
         case 'clear':
             return { output: null, action: { type: 'CLEAR' } };
 
+        case 'exit':
+            return {
+                output: 'Terminating session...',
+                action: { type: 'EXIT_SESSION' },
+            };
+
         case 'theme':
             const subCmd = args[0];
             const themeName = args[1];

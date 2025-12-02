@@ -44,6 +44,11 @@ export const COMMANDS = [
     { cmd: 'resume', desc: 'Download PDF resume' },
     { cmd: 'theme', desc: 'Change terminal theme' },
     { cmd: 'clear', desc: 'Clear terminal screen', synonyms: ['cls'] },
+    {
+        cmd: 'exit',
+        desc: 'End session and switch to standard view',
+        synonyms: ['quit', 'logout'],
+    },
 ];
 
 export const COMMAND_SYNONYMS: { [key: string]: string } = {
@@ -55,6 +60,8 @@ export const COMMAND_SYNONYMS: { [key: string]: string } = {
     exp: 'experience',
     work: 'experience',
     edu: 'education',
+    quit: 'exit',
+    logout: 'exit',
 };
 
 export const ABOUT = ABOUT_DATA;

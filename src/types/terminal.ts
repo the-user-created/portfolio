@@ -7,7 +7,8 @@ export type TerminalAction =
     | { type: 'SET_THEME'; payload: string }
     | { type: 'CONFIRM_DESTRUCTION' }
     | { type: 'TRIGGER_MELTDOWN' }
-    | { type: 'TRIGGER_MATRIX' };
+    | { type: 'TRIGGER_MATRIX' }
+    | { type: 'EXIT_SESSION' };
 
 export interface TerminalLine {
     id: string;

@@ -198,4 +198,20 @@ describe('processCommand Utility', () => {
             expect(result.output).toContain('Usage: open <resource>');
         });
     });
+
+    it('returns EXIT_SESSION action for "exit" command', () => {
+        const result = processCommand('exit');
+        expect(result.action).toEqual({ type: 'EXIT_SESSION' });
+        expect(result.output).toContain('Terminating');
+    });
+
+    it('resolves "quit" synonym to EXIT_SESSION action', () => {
+        const result = processCommand('quit');
+        expect(result.action).toEqual({ type: 'EXIT_SESSION' });
+    });
+
+    it('resolves "logout" synonym to EXIT_SESSION action', () => {
+        const result = processCommand('logout');
+        expect(result.action).toEqual({ type: 'EXIT_SESSION' });
+    });
 });
