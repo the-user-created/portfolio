@@ -587,18 +587,17 @@ export default function Terminal() {
                 ref={scrollRef}
                 className="scrollbar-hide h-full w-full overflow-y-auto"
             >
-                <div className="flex flex-col space-y-1">
+                <div className="flex max-w-full flex-col space-y-1">
                     {history.map((line) => (
                         <div
                             key={line.id}
-                            // Apply text skewing/colors at Medium Glitch Intensity (Level 1+)
                             className={`${
                                 line.type === 'error'
                                     ? 'text-[var(--term-error)]'
                                     : line.type === 'system'
                                       ? 'text-[var(--term-dim)]'
                                       : 'text-[var(--term-text)]'
-                            } ${glitchIntensity >= 1 ? 'glitch-text' : ''}`}
+                            } ${glitchIntensity >= 1 ? 'glitch-text' : ''} break-words whitespace-pre-wrap`}
                         >
                             {line.content}
                         </div>
@@ -607,7 +606,7 @@ export default function Terminal() {
 
                 {!isBooting && !isMeltdown && (
                     <div className="mt-2 flex items-center pb-[max(1rem,env(safe-area-inset-bottom))]">
-                        <span className="mr-2 font-bold text-[var(--term-prompt)]">
+                        <span className="mr-2 shrink-0 font-bold text-[var(--term-prompt)]">
                             {inputMode === 'confirmation' ? '?' : '>'}
                         </span>
                         <input
@@ -623,7 +622,7 @@ export default function Terminal() {
                                 }
                             }}
                             onKeyDown={handleKeyDown}
-                            className="w-full bg-transparent text-[var(--term-text)] caret-[var(--term-prompt)] outline-none"
+                            className="min-w-0 flex-1 bg-transparent text-[var(--term-text)] caret-[var(--term-prompt)] outline-none"
                             autoFocus
                             autoComplete="off"
                             spellCheck="false"
