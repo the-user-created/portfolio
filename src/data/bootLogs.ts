@@ -444,7 +444,7 @@ export const BOOT_LOGS: BootLogLine[] = [
     { text: '[INFO] Starting system services...' },
     { text: '[ OK ] Started History Service.' },
     { text: '[ OK ] Started Input Service.' },
-    { text: ' [OK ] Started Theming Engine.' },
+    { text: '[ OK ] Started Theming Engine.' },
     { text: '[ OK ] Started Meltdown Prevention Daemon.' },
     { text: '[ OK ] Started ASCII Cat Renderer.' },
     { text: '[ OK ] All services started.', delay: 150 },

@@ -24,12 +24,13 @@ describe('processCommand Utility', () => {
     it('returns error for invalid project id', () => {
         const result = processCommand('project 999');
         expect(result.type).toBe('error');
-        // Using string matching for error message
-        expect(result.output).toContain("Project '999' not found");
+        expect(result.output).toContain(
+            "Error: Data shard '999' corrupted or not found."
+        );
     });
 
     it('returns valid project for correct id', () => {
-        const result = processCommand('project 1');
+        const result = processCommand('project fers');
         expect(result.type).not.toBe('error');
         expect(result.output).toBeDefined();
     });
@@ -107,12 +108,11 @@ describe('processCommand Utility', () => {
         it('resolves "ls" to the "projects" command', () => {
             const result = processCommand('ls');
             expect(result.type).not.toBe('error');
-            // A simple check to ensure it didn't fall through to the default case
             expect(result.output).toBeDefined();
         });
 
-        it('resolves "cd 1" to the "project 1" command', () => {
-            const result = processCommand('cd 1');
+        it('resolves "cd fers" to the "project fers" command', () => {
+            const result = processCommand('cd fers');
             expect(result.type).not.toBe('error');
             expect(result.output).toBeDefined();
         });

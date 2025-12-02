@@ -1,7 +1,15 @@
 import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import BoringPortfolioPage from '../page';
-import { ABOUT, CONTACT, PROJECTS, SKILLS } from '@/data/content';
+import {
+    ABOUT,
+    AWARDS,
+    CONTACT,
+    EXPERIENCE,
+    PROJECTS,
+    SKILLS,
+    VOLUNTEER,
+} from '@/data/content';
 
 describe('BoringPortfolioPage', () => {
     it('renders all main sections of the portfolio', () => {
@@ -21,44 +29,67 @@ describe('BoringPortfolioPage', () => {
             screen.getByRole('heading', { level: 2, name: 'Featured Projects' })
         ).toBeInTheDocument();
         expect(
-            screen.getByRole('heading', { level: 2, name: 'Contact & Links' })
+            screen.getByRole('heading', { level: 2, name: 'Experience' })
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('heading', { level: 2, name: 'Education' })
         ).toBeInTheDocument();
     });
 
     it('renders skills and projects from the data source', () => {
         render(<BoringPortfolioPage />);
 
-        // Find the skills section and check for a skill *within* it
         const skillsSection = screen.getByRole('region', {
             name: /technical skills/i,
         });
+
+        const firstSkill = SKILLS.languages[0].replace(
+            /[.*+?^${}()|[\]\\]/g,
+            '\\$&'
+        );
+
         expect(
-            within(skillsSection).getByText(new RegExp(SKILLS.frontend[0]))
+            within(skillsSection).getByText(new RegExp(firstSkill))
         ).toBeInTheDocument();
 
-        // Check for all projects
         PROJECTS.forEach((project) => {
-            // Find each project article by its accessible name (the heading)
             const projectArticle = screen.getByRole('article', {
-                name: project.name,
+                name: project.title,
             });
-            // Check for the project description *within* that article
+
             expect(
                 within(projectArticle).getByText(
-                    project.details || project.description
+                    project.overview || project.description
                 )
             ).toBeInTheDocument();
+        });
+    });
+
+    it('renders experience items', () => {
+        render(<BoringPortfolioPage />);
+        const expSection = screen.getByRole('region', { name: /experience/i });
+
+        EXPERIENCE.forEach((job) => {
+            expect(
+                within(expSection).getByText(job.company)
+            ).toBeInTheDocument();
+            expect(within(expSection).getByText(job.role)).toBeInTheDocument();
         });
     });
 
     it('renders contact information with correct links', () => {
         render(<BoringPortfolioPage />);
 
-        const emailLink = screen.getByRole('link', { name: CONTACT.email });
-        expect(emailLink).toBeInTheDocument();
-        expect(emailLink).toHaveAttribute('href', `mailto:${CONTACT.email}`);
+        // There may be multiple links (header and footer), grabbing all
+        const emailLinks = screen.getAllByRole('link', { name: CONTACT.email });
+        expect(emailLinks[0]).toBeInTheDocument();
+        expect(emailLinks[0]).toHaveAttribute(
+            'href',
+            `mailto:${CONTACT.email}`
+        );
 
-        const githubLink = screen.getByRole('link', { name: CONTACT.github });
+        // Checking GitHub link in header
+        const githubLink = screen.getByRole('link', { name: 'GitHub' });
         expect(githubLink).toBeInTheDocument();
         expect(githubLink).toHaveAttribute('href', `https://${CONTACT.github}`);
     });
@@ -66,9 +97,81 @@ describe('BoringPortfolioPage', () => {
     it('contains a link back to the terminal version', () => {
         render(<BoringPortfolioPage />);
         const terminalLink = screen.getByRole('link', {
-            name: 'terminal version',
+            name: /switch to terminal mode/i,
         });
         expect(terminalLink).toBeInTheDocument();
         expect(terminalLink).toHaveAttribute('href', '/');
+    });
+
+    it('renders experience items with optional links', () => {
+        render(<BoringPortfolioPage />);
+        const expSection = screen.getByRole('region', { name: /experience/i });
+
+        EXPERIENCE.forEach((job) => {
+            if (job.link) {
+                const link = within(expSection).getByRole('link', {
+                    name: job.company,
+                });
+                expect(link).toBeInTheDocument();
+                expect(link).toHaveAttribute('href', job.link);
+            } else {
+                expect(
+                    within(expSection).getByText(job.company)
+                ).toBeInTheDocument();
+            }
+            expect(within(expSection).getByText(job.role)).toBeInTheDocument();
+        });
+    });
+
+    it('renders project links including PDF reports', () => {
+        render(<BoringPortfolioPage />);
+
+        PROJECTS.forEach((project) => {
+            const projectArticle = screen.getByRole('article', {
+                name: project.title,
+            });
+
+            if (project.github) {
+                expect(
+                    within(projectArticle).getByRole('link', {
+                        name: /view source/i,
+                    })
+                ).toHaveAttribute('href', project.github);
+            }
+
+            if (project.reportUrl) {
+                expect(
+                    within(projectArticle).getByRole('link', {
+                        name: /download pdf/i,
+                    })
+                ).toHaveAttribute('href', project.reportUrl);
+            }
+        });
+    });
+
+    it('renders awards and volunteer links correctly', () => {
+        render(<BoringPortfolioPage />);
+
+        // Check Awards links
+        AWARDS.forEach((award) => {
+            if (award.link) {
+                const link = screen.getByRole('link', { name: award.title });
+                expect(link).toHaveAttribute('href', award.link);
+            } else {
+                expect(screen.getByText(award.title)).toBeInTheDocument();
+            }
+        });
+
+        // Check Volunteer links
+        VOLUNTEER.forEach((vol) => {
+            if (vol.link) {
+                const link = screen.getByRole('link', {
+                    name: vol.organization,
+                });
+                expect(link).toHaveAttribute('href', vol.link);
+            } else {
+                expect(screen.getByText(vol.organization)).toBeInTheDocument();
+            }
+        });
     });
 });
