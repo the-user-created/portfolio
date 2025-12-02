@@ -205,12 +205,6 @@ export const processCommand = (
                                 <span className="font-bold text-[var(--term-text)]">
                                     {award.title}
                                 </span>
-                                {award.institution && (
-                                    <span className="text-[var(--term-dim)]">
-                                        {' '}
-                                        - {award.institution}
-                                    </span>
-                                )}
                                 {award.year && (
                                     <span className="text-[var(--term-dim)]">
                                         {' '}
@@ -291,24 +285,35 @@ export const processCommand = (
         case 'projects':
             return {
                 output: (
-                    <div className="flex flex-col gap-2">
-                        <span className="font-bold text-[var(--term-prompt)]">
-                            Featured Projects:
-                        </span>
-                        <ul className="list-none space-y-2 pl-4">
+                    <div className="flex flex-col gap-4">
+                        <div className="border-b border-[var(--term-dim)] pb-2">
+                            <span className="font-bold text-[var(--term-prompt)]">
+                                PROJECT_REGISTRY_V1.0
+                            </span>
+                        </div>
+                        <ul className="list-none space-y-3">
                             {PROJECTS.map((p) => (
-                                <li key={p.id}>
-                                    <span className="font-bold">[{p.id}]</span>{' '}
-                                    {p.name} -{' '}
-                                    <span className="text-[var(--term-dim)]">
+                                <li key={p.id} className="flex flex-col">
+                                    <div className="flex items-center gap-2">
+                                        <span className="font-bold text-[var(--term-text)]">
+                                            [{p.id}]
+                                        </span>
+                                        <span className="font-bold">
+                                            {p.name}
+                                        </span>
+                                    </div>
+                                    <span className="pl-2 text-[var(--term-dim)]">
                                         {p.description}
+                                    </span>
+                                    <span className="pl-2 text-xs text-[var(--term-dim)]">
+                                        Stack: {p.stack.join(', ')}
                                     </span>
                                 </li>
                             ))}
                         </ul>
                         <span className="mt-2 text-[var(--term-dim)] italic">
-                            Type &#39;project &lt;id&gt;&#39; for details (e.g.,
-                            &#39;project 1&#39;)
+                            Usage: type &#39;project &lt;id&gt;&#39; to load
+                            data shard (e.g., &#39;project fers&#39;)
                         </span>
                     </div>
                 ),
@@ -321,48 +326,123 @@ export const processCommand = (
                     type: 'error',
                 };
             }
-            const project = PROJECTS.find((p) => p.id === args[0]);
+            const project = PROJECTS.find(
+                (p) => p.id === args[0].toLowerCase()
+            );
             if (!project) {
                 return {
-                    output: `Project '${args[0]}' not found.`,
+                    output: `Error: Data shard '${args[0]}' corrupted or not found.`,
                     type: 'error',
                 };
             }
             return {
                 output: (
-                    <div className="my-2 flex flex-col gap-2 border-l-2 border-[var(--term-dim)] pl-4">
-                        <h3 className="text-lg font-bold text-[var(--term-prompt)]">
-                            {project.name}
-                        </h3>
-                        <p>{project.details || project.description}</p>
-                        <div>
-                            <span className="font-bold">Tech Stack:</span>{' '}
-                            {project.stack.join(', ')}
+                    <div className="my-2 flex flex-col gap-4">
+                        {/* Header */}
+                        <div className="border-l-2 border-[var(--term-prompt)] pl-4">
+                            <h3 className="text-xl font-bold text-[var(--term-prompt)]">
+                                {project.title}
+                            </h3>
+                            <div className="mt-1 flex flex-wrap gap-2 text-xs">
+                                {project.stack.map((tech) => (
+                                    <span
+                                        key={tech}
+                                        className="rounded bg-[var(--term-dim)]/20 px-1 py-0.5 text-[var(--term-text)]"
+                                    >
+                                        {tech}
+                                    </span>
+                                ))}
+                            </div>
                         </div>
-                        {(project.github || project.link) && (
-                            <div className="mt-2 flex gap-4">
+
+                        {/* Overview */}
+                        <div>
+                            <span className="font-bold text-[var(--term-prompt)] underline">
+                                OVERVIEW
+                            </span>
+                            <p className="mt-1 text-[var(--term-text)]">
+                                {project.overview}
+                            </p>
+                        </div>
+
+                        {/* Objectives */}
+                        {project.objectives && (
+                            <div>
+                                <span className="font-bold text-[var(--term-prompt)] underline">
+                                    MISSION OBJECTIVES
+                                </span>
+                                <ul className="mt-1 list-disc pl-5 text-[var(--term-dim)]">
+                                    {project.objectives.map((obj, i) => (
+                                        <li key={i}>{obj}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+
+                        {/* Challenges & Results */}
+                        {project.challenges && (
+                            <div>
+                                <span className="font-bold text-[var(--term-prompt)] underline">
+                                    OBSTACLES ENCOUNTERED
+                                </span>
+                                <p className="mt-1">{project.challenges}</p>
+                            </div>
+                        )}
+
+                        {project.results && (
+                            <div>
+                                <span className="font-bold text-[var(--term-prompt)] underline">
+                                    MISSION OUTCOME
+                                </span>
+                                <p className="mt-1">{project.results}</p>
+                            </div>
+                        )}
+
+                        {/* Links / Artifacts */}
+                        <div className="mt-2 border-t border-[var(--term-dim)] pt-2">
+                            <span className="font-bold text-[var(--term-prompt)]">
+                                EXTERNAL LINKS:
+                            </span>
+                            <div className="mt-1 flex flex-col gap-1 pl-2">
                                 {project.github && (
                                     <a
                                         href={project.github}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-[var(--term-prompt)] underline hover:no-underline"
+                                        className="text-[var(--term-text)] underline hover:text-[var(--term-prompt)]"
                                     >
-                                        GitHub
+                                        [SOURCE CODE]
                                     </a>
                                 )}
-                                {project.link && (
+                                {project.reportUrl && (
                                     <a
-                                        href={project.link}
+                                        href={project.reportUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-[var(--term-prompt)] underline hover:no-underline"
+                                        className="text-[var(--term-text)] underline hover:text-[var(--term-prompt)]"
                                     >
-                                        Demo
+                                        [DOWNLOAD REPORT PDF]
                                     </a>
                                 )}
+                                {project.images &&
+                                    project.images.length > 0 && (
+                                        <div className="mt-2 text-xs text-[var(--term-dim)]">
+                                            Available Figures (click to view):
+                                            {project.images.map((img, i) => (
+                                                <a
+                                                    key={i}
+                                                    href={img.src}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="ml-2 block underline hover:text-[var(--term-text)]"
+                                                >
+                                                    - {img.caption}
+                                                </a>
+                                            ))}
+                                        </div>
+                                    )}
                             </div>
-                        )}
+                        </div>
                     </div>
                 ),
             };

@@ -1,19 +1,113 @@
 [
     {
-        "id": "1",
-        "name": "Terminal Portfolio",
-        "description": "A React-based interactive terminal portfolio.",
-        "stack": ["Next.js", "TypeScript", "Tailwind"],
-        "details": "A fully functional terminal emulator in the browser. Features command history, theming, and a filesystem-like navigation structure.",
-        "github": "https://github.com/the-user-created/portfolio"
+        "id": "fers",
+        "name": "FERS Neuro-Upgrade",
+        "title": "Modernising the FERS Software Package",
+        "description": "Dragging a legacy radar simulator (FERS) from C++98/03 into the C++20/23 era.",
+        "stack": ["C++20/23", "GitHub Actions", "CMake", "Valgrind", "HDF5"],
+        "github": "https://github.com/the-user-created/FERS",
+        "reportUrl": "/assets/pdf/modern_fers_software.pdf",
+        "overview": "This project focused on updating the Flexible, Extensible Radar Simulator (FERS) to meet modern C++ standards. Originally developed in C++98/03, FERS is a vital tool for the Radar and Remote Sensing Group at UCT. The modernization enhanced performance, readability, and maintainability.",
+        "objectives": [
+            "Upgrade codebase to C++20/23 features (concepts, ranges, modules).",
+            "Implement performance optimizations (multithreading, smart pointers).",
+            "Ensure backward compatibility for simulation integrity.",
+            "Conduct thorough regression testing and profiling."
+        ],
+        "challenges": "Ensuring backward compatibility while refactoring core memory management logic. Managing complexities of new C++ features and mitigating regression risks during extensive overhauls.",
+        "results": "Achieved speedups ranging from 1.46x to 3.55x. Eliminated memory leaks via smart pointers. Achieved 90.5% line coverage and 95.8% function coverage in regression testing.",
+        "images": [
+            {
+                "src": "/assets/img/average_cpu_usage.png",
+                "alt": "CPU Usage",
+                "caption": "Figure 1: CPU Usage Comparison"
+            },
+            {
+                "src": "/assets/img/average_speedups.png",
+                "alt": "Speedups",
+                "caption": "Figure 2: Speedup Benchmarks"
+            }
+        ]
     },
     {
-        "id": "2",
-        "name": "E-Commerce Dashboard",
-        "description": "Real-time analytics dashboard for online stores.",
-        "stack": ["React", "Node.js", "Socket.io"],
-        "details": "Provided live sales metrics and inventory tracking using WebSockets for instant updates.",
-        "link": "https://demo.example.com/dashboard",
-        "github": "https://github.com/example/dashboard"
+        "id": "arm",
+        "name": "STM32 Data Encryption",
+        "title": "Encryption and Compression on Resource-Constrained Embedded ARM MCs",
+        "description": "Implementing LZSS compression and Blowfish encryption on an STM32 chip for Antarctic buoys.",
+        "stack": ["C", "Python", "STM32 HAL", "Assembly"],
+        "github": "https://github.com/the-user-created/EEE3097S-Project",
+        "reportUrl": "/assets/pdf/arm_sharc_comms.pdf",
+        "overview": "Designed for secure data transmission from Antarctic sensor buoys over the Iridium satellite network. The goal was to minimize transmission costs via compression while ensuring data security.",
+        "objectives": [
+            "Implement LZSS compression and Blowfish encryption on STM32F051.",
+            "Ensure data integrity with CRC-32 checksums.",
+            "Optimize for extremely limited memory and processing power."
+        ],
+        "details": "Data from an IMU is processed to extract Fourier coefficients. The system preserves at least 25% of lower coefficients while compressing the rest.",
+        "challenges": "Limited memory (8KB RAM) and 48MHz clock speed restricted algorithm choices. Debugging logic errors between Python prototypes and C firmware implementation.",
+        "results": "Achieved average compression ratio of 1.812 and encryption throughput of ~910 bytes/sec. Successfully validated against acceptance test procedures.",
+        "images": [
+            {
+                "src": "/assets/img/sys_op_diag.png",
+                "alt": "System Diagram",
+                "caption": "Figure 1: System Operation Diagram"
+            },
+            {
+                "src": "/assets/img/compress-speed.png",
+                "alt": "Compression Stats",
+                "caption": "Figure 2: Compression Speed Graph"
+            },
+            {
+                "src": "/assets/img/encrypt-speed.png",
+                "alt": "Encryption Stats",
+                "caption": "Figure 3: Encryption Speed Graph"
+            }
+        ]
+    },
+    {
+        "id": "yoda",
+        "name": "MD5 vs MD6 Analysis",
+        "title": "Comparative Analysis and Optimization of MD5 & MD6 Hashing Algorithms",
+        "description": "A digital cage match pitting MD5 against MD6 using C++, OpenCL, and Verilog.",
+        "stack": ["C++", "OpenCL", "Verilog", "Vivado"],
+        "github": "https://github.com/the-user-created/EEE4120F-YODA",
+        "reportUrl": "/assets/pdf/yoda.pdf",
+        "overview": "Evaluated the performance trade-offs between software (C++), parallel computing (OpenCL), and hardware acceleration (Verilog) for cryptographic hashing.",
+        "objectives": [
+            "Implement MD5 (sequential) and MD6 (parallelizable) across all platforms.",
+            "Benchmark execution time and throughput.",
+            "Analyze the efficiency of GPU offloading vs FPGA synthesis."
+        ],
+        "challenges": "MD5 is inherently sequential, limiting parallel gains. OpenCL implementations faced bottlenecks in kernel data transfer. Verilog implementation was fast but limited by input size constraints.",
+        "results": "Parallel C++ MD6 achieved significant speedups on multicore CPUs. Verilog MD5 was fastest for small inputs but lacked flexibility. OpenCL proved overhead-heavy for this specific workload.",
+        "images": [
+            {
+                "src": "/assets/img/comparison_execution_time.png",
+                "alt": "Execution Time",
+                "caption": "Figure 1: Execution Time Analysis"
+            },
+            {
+                "src": "/assets/img/comparison_throughput.png",
+                "alt": "Throughput",
+                "caption": "Figure 1: Throughput Analysis"
+            }
+        ]
+    },
+    {
+        "id": "enviro",
+        "name": "Enviro-Sense Grid",
+        "title": "Enviro-Sense: Biomonitoring Grid for Apex Predators",
+        "description": "Wireless sensor grid using ESP32 and Pi Zeros to monitor raptor nesting sites.",
+        "stack": ["C++", "Arduino", "Raspberry Pi", "ESP32"],
+        "reportUrl": "/assets/pdf/enviro-sense.pdf",
+        "overview": "A low-cost Wireless Sensor Network (WSN) designed to monitor temperature and humidity at remote raptor nesting sites to aid conservation efforts.",
+        "objectives": [
+            "Develop a cost-effective monitoring node (<$20).",
+            "Ensure reliable wireless transmission to rendezvous nodes.",
+            "Maximize battery life via deep-sleep cycles."
+        ],
+        "details": "Used ESP32-PICO-D4 motes with DHT11 sensors and DS3231 RTCs. Nodes wake up, sample data, transmit, and immediately sleep to conserve power.",
+        "challenges": "Balancing cost vs. data accuracy. Managing power budgets for long-term deployment without maintenance. Ensuring data integrity over lossy wireless links.",
+        "results": "Prototype successfully gathered and transmitted accurate telemetry. Validated low-power operations suitable for field deployment."
     }
 ]
