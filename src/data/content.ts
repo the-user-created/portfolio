@@ -3,6 +3,11 @@ import SKILLS_DATA from './jsons/skills.json';
 import PROJECTS_DATA from './jsons/projects.json';
 import CONTACT_DATA from './jsons/contact.json';
 import FORTUNES_DATA from './jsons/fortunes.json';
+import EXPERIENCE_DATA from './jsons/experience.json';
+import EDUCATION_DATA from './jsons/education.json';
+import VOLUNTEER_DATA from './jsons/volunteer.json';
+import AWARDS_DATA from './jsons/awards.json';
+import INTERESTS_DATA from './jsons/interests.json';
 
 export const COMMANDS = [
     { cmd: 'help', desc: 'List available commands' },
@@ -11,7 +16,17 @@ export const COMMANDS = [
         desc: 'Display information about me',
         synonyms: ['whoami'],
     },
-    { cmd: 'skills', desc: 'List technical skills' },
+    {
+        cmd: 'experience',
+        desc: 'Work history',
+        synonyms: ['exp', 'work'],
+    },
+    {
+        cmd: 'education',
+        desc: 'Academic background',
+        synonyms: ['edu'],
+    },
+    { cmd: 'skills', desc: 'List technical capabilities' },
     {
         cmd: 'projects',
         desc: 'View project portfolio',
@@ -22,11 +37,12 @@ export const COMMANDS = [
         desc: 'Shows details for a specific project',
         synonyms: ['cd'],
     },
+    { cmd: 'volunteer', desc: 'Community service and volunteering' },
+    { cmd: 'awards', desc: 'Honors and achievements' },
+    { cmd: 'interests', desc: 'Hobbies and off-clock activities' },
     { cmd: 'contact', desc: 'Display contact information' },
-    { cmd: 'resume', desc: 'Download resume' },
-    { cmd: 'theme', desc: 'Change terminal theme (try "theme list")' },
-    { cmd: 'open', desc: 'Open a resource (e.g., github, linkedin)' },
-    { cmd: 'matrix', desc: 'Wake up, Neo...' },
+    { cmd: 'resume', desc: 'Download PDF resume' },
+    { cmd: 'theme', desc: 'Change terminal theme' },
     { cmd: 'clear', desc: 'Clear terminal screen', synonyms: ['cls'] },
 ];
 
@@ -36,6 +52,9 @@ export const COMMAND_SYNONYMS: { [key: string]: string } = {
     cd: 'project',
     whoami: 'about',
     cls: 'clear',
+    exp: 'experience',
+    work: 'experience',
+    edu: 'education',
 };
 
 export const ABOUT = ABOUT_DATA;
@@ -43,6 +62,11 @@ export const SKILLS = SKILLS_DATA;
 export const PROJECTS = PROJECTS_DATA;
 export const CONTACT = CONTACT_DATA;
 export const FORTUNES = FORTUNES_DATA;
+export const EXPERIENCE = EXPERIENCE_DATA;
+export const EDUCATION = EDUCATION_DATA;
+export const VOLUNTEER = VOLUNTEER_DATA;
+export const AWARDS = AWARDS_DATA;
+export const INTERESTS = INTERESTS_DATA;
 
 export const RESUME_URL = '/resume.pdf';
 

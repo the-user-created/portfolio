@@ -1,0 +1,20 @@
+[
+    {
+        "school": "University of Cape Town",
+        "degree": "MSc(Eng) Electrical Engineering",
+        "year": "2025 - Present",
+        "details": "Specializing in Radar and Software Engineering. Building the Flexible, Extensible Radar Simulator (FERS)."
+    },
+    {
+        "school": "University of Cape Town",
+        "degree": "BSc(Eng) Electrical and Computer Engineering",
+        "year": "2020 - 2024",
+        "details": "Cumulative GPA: 64.7%. Achieved distinctions in Engineering Design (EEE3097S), High Performance Embedded Systems (EEE4120F), Linear Algebra (MAM2084S), and Final Year Project (EEE4022S)."
+    },
+    {
+        "school": "Cambridge AS & IGCSE Level",
+        "degree": "Self-Studied",
+        "year": "2016 - 2019",
+        "details": "Aggregate: 82%. Achieved distinctions in Mathematics, Physics, Chemistry, and Computer Science through self-directed study."
+    }
+]

@@ -3,14 +3,19 @@ import {
     ABOUT,
     ASCII_CAT,
     ASCII_HELLO,
+    AWARDS,
     COMMAND_SYNONYMS,
     COMMANDS,
     CONTACT,
+    EDUCATION,
+    EXPERIENCE,
     FORTUNES,
+    INTERESTS,
     PROJECTS,
     RESUME_URL,
     SKILLS,
     THEMES,
+    VOLUNTEER,
 } from '@/data/content';
 
 export const processCommand = (
@@ -27,6 +32,7 @@ export const processCommand = (
             type: 'system',
         };
     }
+
     if (trimmed === ':(){ :|:& };:') {
         return {
             output: 'Fork bomb detected. System resources critical.',
@@ -77,7 +83,8 @@ export const processCommand = (
                         <span>{ABOUT.role}</span>
                         <p>{ABOUT.bio}</p>
                         <span className="text-[var(--term-dim)] italic">
-                            Try typing &#39;skills&#39; to see what I can do.
+                            Type &#39;skills&#39; or &#39;experience&#39; to
+                            learn more.
                         </span>
                     </div>
                 ),
@@ -89,22 +96,194 @@ export const processCommand = (
                     <div className="flex flex-col gap-2">
                         <div>
                             <span className="font-bold text-[var(--term-prompt)]">
-                                Frontend:
+                                Languages:
                             </span>{' '}
-                            {SKILLS.frontend.join(', ')}
+                            {SKILLS.languages.join(', ')}
                         </div>
                         <div>
                             <span className="font-bold text-[var(--term-prompt)]">
-                                Backend:
+                                Frameworks:
                             </span>{' '}
-                            {SKILLS.backend.join(', ')}
+                            {SKILLS.frameworks.join(', ')}
                         </div>
                         <div>
                             <span className="font-bold text-[var(--term-prompt)]">
-                                Tools:
+                                Cloud:
+                            </span>{' '}
+                            {SKILLS.cloud.join(', ')}
+                        </div>
+                        <div>
+                            <span className="font-bold text-[var(--term-prompt)]">
+                                Tools & Platforms:
                             </span>{' '}
                             {SKILLS.tools.join(', ')}
                         </div>
+                        <div>
+                            <span className="font-bold text-[var(--term-prompt)]">
+                                Professional:
+                            </span>{' '}
+                            {SKILLS.soft.join(', ')}
+                        </div>
+                    </div>
+                ),
+            };
+
+        case 'experience':
+            return {
+                output: (
+                    <div className="flex flex-col gap-4">
+                        {EXPERIENCE.map((job, index) => (
+                            <div key={index} className="flex flex-col gap-1">
+                                <div className="flex flex-wrap items-baseline justify-between gap-x-2">
+                                    <span className="font-bold text-[var(--term-prompt)]">
+                                        {job.role}
+                                    </span>
+                                    <span className="text-sm text-[var(--term-dim)]">
+                                        {job.period}
+                                    </span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-sm">
+                                        @ {job.company}
+                                    </span>
+                                    {job.link && (
+                                        <a
+                                            href={job.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-xs text-[var(--term-dim)] underline hover:text-[var(--term-text)]"
+                                        >
+                                            [link]
+                                        </a>
+                                    )}
+                                </div>
+                                <p className="mb-1">{job.description}</p>
+                                <ul className="list-disc pl-5 text-[var(--term-dim)]">
+                                    {job.details.map((detail, i) => (
+                                        <li key={i}>{detail}</li>
+                                    ))}
+                                </ul>
+                                <div className="mt-1 text-xs text-[var(--term-dim)]">
+                                    Stack: {job.tech.join(', ')}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ),
+            };
+
+        case 'education':
+            return {
+                output: (
+                    <div className="flex flex-col gap-4">
+                        {EDUCATION.map((edu, index) => (
+                            <div key={index} className="flex flex-col">
+                                <div className="flex flex-wrap items-baseline justify-between gap-x-2">
+                                    <span className="font-bold text-[var(--term-prompt)]">
+                                        {edu.school}
+                                    </span>
+                                    <span className="text-sm text-[var(--term-dim)]">
+                                        {edu.year}
+                                    </span>
+                                </div>
+                                <div>{edu.degree}</div>
+                                <div className="text-[var(--term-dim)]">
+                                    {edu.details}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ),
+            };
+
+        case 'awards':
+            return {
+                output: (
+                    <ul className="list-disc space-y-2 pl-4">
+                        {AWARDS.map((award, index) => (
+                            <li key={index}>
+                                <span className="font-bold text-[var(--term-text)]">
+                                    {award.title}
+                                </span>
+                                {award.institution && (
+                                    <span className="text-[var(--term-dim)]">
+                                        {' '}
+                                        - {award.institution}
+                                    </span>
+                                )}
+                                {award.year && (
+                                    <span className="text-[var(--term-dim)]">
+                                        {' '}
+                                        ({award.year})
+                                    </span>
+                                )}
+                                {award.link && (
+                                    <a
+                                        href={award.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="ml-2 text-xs text-[var(--term-prompt)] underline hover:no-underline"
+                                    >
+                                        [View]
+                                    </a>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                ),
+            };
+
+        case 'volunteer':
+            return {
+                output: (
+                    <div className="flex flex-col gap-4">
+                        {VOLUNTEER.map((vol, index) => (
+                            <div key={index} className="flex flex-col gap-1">
+                                <div className="flex flex-wrap items-baseline gap-x-2">
+                                    <span className="font-bold text-[var(--term-prompt)]">
+                                        {vol.role}
+                                    </span>
+                                    <span>- {vol.organization}</span>
+                                    {vol.link && (
+                                        <a
+                                            href={vol.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-xs text-[var(--term-dim)] underline hover:text-[var(--term-text)]"
+                                        >
+                                            [link]
+                                        </a>
+                                    )}
+                                </div>
+                                <span className="text-sm text-[var(--term-dim)]">
+                                    {vol.event}
+                                </span>
+                                <p>{vol.description}</p>
+                                <ul className="list-disc pl-5 text-[var(--term-dim)]">
+                                    {vol.details.map((d, i) => (
+                                        <li key={i}>{d}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))}
+                    </div>
+                ),
+            };
+
+        case 'interests':
+            return {
+                output: (
+                    <div className="flex flex-col gap-2">
+                        {INTERESTS.map((int, index) => (
+                            <div key={index}>
+                                <span className="font-bold text-[var(--term-prompt)]">
+                                    {int.title}:
+                                </span>{' '}
+                                <span className="text-[var(--term-dim)]">
+                                    {int.description}
+                                </span>
+                            </div>
+                        ))}
                     </div>
                 ),
             };
@@ -271,6 +450,7 @@ export const processCommand = (
                         type: 'error',
                     };
             }
+
         case 'clear':
             return { output: null, action: { type: 'CLEAR' } };
 

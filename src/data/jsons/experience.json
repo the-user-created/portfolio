@@ -1,0 +1,43 @@
+[
+    {
+        "company": "Arixian",
+        "role": "Software Engineering Intern",
+        "period": "November 2023 - January 2024",
+        "link": "https://arixian.ai",
+        "description": "Developed microservices for secure optic-data streaming for an AI-driven security startup.",
+        "details": [
+            "Built microservices using Python.",
+            "Hardened secure communication protocols against intrusion.",
+            "Containerized applications using Docker.",
+            "Collaborated with the team to enhance system security and performance."
+        ],
+        "tech": ["Python", "Docker", "GitLab", "CI/CD"]
+    },
+    {
+        "company": "Oobalink",
+        "role": "iOS App Developer (Contract)",
+        "period": "October 2020 - Match 2021",
+        "link": "https://ooba.co.za",
+        "description": "Built a fully interactive iOS prototype for streamlining client data acquisition for a major loan originator.",
+        "details": [
+            "Designed and implemented the UI with SwiftUI.",
+            "Built interactive data-entry forms and managed local state.",
+            "Implemented on-device data storage solutions.",
+            "Created a proof-of-concept used for stakeholder demonstration."
+        ],
+        "tech": ["Swift", "SwiftUI", "Xcode", "GitHub"]
+    },
+    {
+        "company": "Funky Chickens",
+        "role": "Business Operations Manager",
+        "period": "2016 - 2019",
+        "description": "Managed sales, marketing, and operations for an organic food retailer.",
+        "details": [
+            "Managed invoicing and financial tracking.",
+            "Oversaw stock management and logistics.",
+            "Tracked sales performance and set targets.",
+            "Handled client relations and business development."
+        ],
+        "tech": ["Excel", "Yoco", "Logistics"]
+    }
+]

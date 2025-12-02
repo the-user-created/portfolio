@@ -1,5 +1,19 @@
 {
-    "frontend": ["React", "Next.js", "TypeScript", "Tailwind CSS"],
-    "backend": ["Node.js", "PostgreSQL", "Redis"],
-    "tools": ["Git", "Docker", "Vercel", "Linux"]
+    "languages": ["C++", "Flutter", "Python", "Rust", "TypeScript", "Svelte"],
+    "frameworks": [
+        "FastAPI",
+        "Tauri",
+        "React",
+        "SvelteKit",
+        "Next.js",
+        "Tailwind CSS"
+    ],
+    "cloud": ["Firebase", "Google Cloud Platform (GCP)"],
+    "tools": ["Docker", "Git/GitHub", "Linux (Ubuntu)", "JetBrains IDEs"],
+    "soft": [
+        "Problem Solving",
+        "System Design",
+        "Project Management",
+        "Technical Writing"
+    ]
 }
