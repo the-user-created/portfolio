@@ -74,6 +74,33 @@ export default function Terminal() {
         return `${prefix}-${lineIdCounter.current}`;
     };
 
+    // Global Keydown Listener for "Type to Focus"
+    useEffect(() => {
+        const handleGlobalKeyDown = (e: KeyboardEvent) => {
+            // 1. Do not interfere if the system is in a non-interactive state
+            if (isBooting || isCrashed || isRecovering || isMatrixAnimating)
+                return;
+
+            // 2. Do not interfere if the input is already focused
+            if (document.activeElement === inputRef.current) return;
+
+            // 3. Do not interfere with standard shortcuts (Ctrl+C, Cmd+R, Alt+Tab, etc.)
+            // This allows users to copy text from history without jumping to the bottom.
+            if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+            // 4. Do not trigger on standalone modifier keys
+            if (['Control', 'Shift', 'Alt', 'Meta', 'Tab'].includes(e.key))
+                return;
+
+            // 5. Focus the input
+            // This will naturally scroll the input into view, which is desired behavior when typing.
+            inputRef.current?.focus();
+        };
+
+        window.addEventListener('keydown', handleGlobalKeyDown);
+        return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+    }, [isBooting, isCrashed, isRecovering, isMatrixAnimating]);
+
     // Apply theme to body and clean up on unmount
     useEffect(() => {
         document.body.setAttribute('data-theme', theme);
@@ -144,6 +171,18 @@ export default function Terminal() {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
     }, [history]);
+
+    useEffect(() => {
+        // Keep input in view when virtual keyboard opens
+        const handleResize = () => {
+            if (scrollRef.current) {
+                scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+            }
+        };
+        window.visualViewport?.addEventListener('resize', handleResize);
+        return () =>
+            window.visualViewport?.removeEventListener('resize', handleResize);
+    }, []);
 
     // Meltdown Sequence Effect
     useEffect(() => {
@@ -293,28 +332,11 @@ export default function Terminal() {
             return () => clearTimeout(timer);
         }
     }, [isMatrixAnimating]);
-    // Focus input on click anywhere, unless a text selection is being made.
-    const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
-        // Do not interfere if the user is selecting text
-        const selection = window.getSelection();
-        if (selection && selection.toString().length > 0) {
-            return;
-        }
-
-        // Do not interfere if the click is on an interactive element like a link
-        if ((e.target as HTMLElement).tagName.toLowerCase() === 'a') {
-            return;
-        }
-
-        if (!isBooting && inputRef.current) {
-            inputRef.current.focus();
-        }
-    };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Tab') {
-            e.preventDefault();
             if (input.trim() === '') return;
+            e.preventDefault();
 
             let currentSuggestions = suggestions;
             let currentSuggestionIndex = suggestionIndex;
@@ -457,9 +479,11 @@ export default function Terminal() {
             setInput('');
         }
     };
+
     if (isMatrixAnimating) {
         return <MatrixAnimation />;
     }
+
     if (isCrashed) {
         return (
             <div className="flex h-screen w-full items-center justify-center bg-black text-red-600">
@@ -490,7 +514,6 @@ export default function Terminal() {
                     '--artifact-opacity': glitchIntensity >= 2 ? 0.8 : 0,
                 } as React.CSSProperties
             }
-            onClick={handleContainerClick}
         >
             {/* A discrete link to the standard, non-interactive portfolio page */}
             <Link

@@ -411,7 +411,7 @@ export const processCommand = (
                         {project.objectives && (
                             <div>
                                 <span className="font-bold text-[var(--term-prompt)] underline">
-                                    MISSION OBJECTIVES
+                                    OBJECTIVES
                                 </span>
                                 <ul className="mt-1 list-disc pl-5 text-[var(--term-dim)]">
                                     {project.objectives.map((obj, i) => (
@@ -425,7 +425,7 @@ export const processCommand = (
                         {project.challenges && (
                             <div>
                                 <span className="font-bold text-[var(--term-prompt)] underline">
-                                    OBSTACLES ENCOUNTERED
+                                    CHALLENGES
                                 </span>
                                 <p className="mt-1">{project.challenges}</p>
                             </div>
@@ -434,7 +434,7 @@ export const processCommand = (
                         {project.results && (
                             <div>
                                 <span className="font-bold text-[var(--term-prompt)] underline">
-                                    MISSION OUTCOME
+                                    RESULTS
                                 </span>
                                 <p className="mt-1">{project.results}</p>
                             </div>

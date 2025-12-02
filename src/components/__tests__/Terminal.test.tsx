@@ -176,6 +176,7 @@ describe('Terminal Component', () => {
                 <button>Focus Stealer</button>
             </>
         );
+
         act(() => {
             vi.runAllTimers(); // Finish booting
         });
@@ -189,36 +190,18 @@ describe('Terminal Component', () => {
             name: /focus stealer/i,
         });
 
-        // --- SCENARIO 1: Simple click should focus input ---
+        // --- SCENARIO 1: Simple click should NOT focus input (Updated Requirement) ---
         // Explicitly focus another element to ensure loss of focus
         focusStealerButton.focus();
         expect(input).not.toHaveFocus();
 
         fireEvent.click(terminalContainer); // Click the main container
-        expect(input).toHaveFocus();
 
-        // --- SCENARIO 2: Click should NOT focus input if text is selected ---
-        focusStealerButton.focus();
+        // Updated Expectation: Focus should NOT be redirected to input
         expect(input).not.toHaveFocus();
 
-        // Simulate a text selection
-        const textToSelect = screen.getByText(/Type 'help' to begin/i);
-        const selection = window.getSelection();
-        if (selection) {
-            const range = document.createRange();
-            range.selectNodeContents(textToSelect);
-            selection.removeAllRanges();
-            selection.addRange(range);
-        }
-
-        expect(window.getSelection()?.toString()).toContain('help');
-
-        // Click again. This time, it should *not* focus due to the selection.
-        fireEvent.click(terminalContainer);
-        expect(input).not.toHaveFocus();
-
-        // Clean up selection for next test
-        window.getSelection()?.removeAllRanges();
+        // Note: Text selection logic checks are implicitly covered; if a basic click
+        // doesn't focus, a click-drag selection won't either.
     });
 
     it('triggers and dismisses the matrix animation', async () => {
@@ -286,4 +269,59 @@ describe('Terminal Component', () => {
         getContextMock.mockRestore();
         vi.useRealTimers();
     }, 10000); // Extended timeout to prevent environment lags
+
+    it('automatically focuses input when user starts typing', async () => {
+        vi.useFakeTimers();
+        // Render with a focus stealer to simulate being "unfocused"
+        render(
+            <>
+                <Terminal />
+                <button>Focus Stealer</button>
+            </>
+        );
+
+        act(() => {
+            vi.runAllTimers(); // Finish booting
+        });
+        vi.useRealTimers();
+
+        const input = screen.getByRole('textbox');
+        const focusStealerButton = screen.getByRole('button', {
+            name: /focus stealer/i,
+        });
+
+        // 1. Unfocus the terminal
+        focusStealerButton.focus();
+        expect(input).not.toHaveFocus();
+
+        // 2. Type a standard character
+        fireEvent.keyDown(window, { key: 'a', code: 'KeyA' });
+        expect(input).toHaveFocus();
+    });
+
+    it('does not steal focus when using shortcuts (e.g. Copy)', async () => {
+        vi.useFakeTimers();
+        render(
+            <>
+                <Terminal />
+                <button>Focus Stealer</button>
+            </>
+        );
+        act(() => vi.runAllTimers());
+        vi.useRealTimers();
+
+        const input = screen.getByRole('textbox');
+        const focusStealerButton = screen.getByRole('button', {
+            name: /focus stealer/i,
+        });
+
+        // 1. Unfocus terminal
+        focusStealerButton.focus();
+
+        // 2. Simulate Ctrl+C (Copy)
+        fireEvent.keyDown(window, { key: 'c', code: 'KeyC', ctrlKey: true });
+
+        // 3. Should NOT have focused the input (user is copying text)
+        expect(input).not.toHaveFocus();
+    });
 });
