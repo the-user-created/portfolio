@@ -575,7 +575,9 @@ export default function Terminal() {
 
     return (
         <div
-            className={`gpu-artifacts relative h-[100dvh] w-full overflow-hidden bg-[var(--term-bg)] p-4 text-base text-[var(--term-text)] transition-colors duration-300 md:p-8 ${isFrozen ? 'brightness-150 contrast-200 invert saturate-0 filter' : ''}`}
+            className={`gpu-artifacts relative h-[100dvh] w-full overflow-hidden bg-[var(--term-bg)] p-4 text-base text-[var(--term-text)] transition-colors duration-300 md:p-8 ${
+                isFrozen ? 'blur-[1px] contrast-125 saturate-0 filter' : ''
+            }`}
             style={
                 {
                     '--artifact-opacity': glitchIntensity >= 2 ? 0.8 : 0,
