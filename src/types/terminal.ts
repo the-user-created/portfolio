@@ -21,3 +21,13 @@ export interface CommandResponse {
     type?: LineType;
     action?: TerminalAction;
 }
+
+export interface Project {
+    id: string;
+    name: string;
+    description: string;
+    stack: string[];
+    details?: string;
+    link?: string;
+    github?: string;
+}

@@ -89,6 +89,7 @@ Change the look and feel of the terminal:
 ├── src/
 │   ├── app/             # Application entry points, layouts, and global styles
 │   ├── components/      # Reusable React UI components (Terminal, Input, etc.)
+│   ├── data/            # JSON content files and boot logs
 │   ├── types/           # TypeScript definitions and interfaces
 │   └── utils/           # Command parsing logic and helper functions
 ├── public/              # Static assets (images, fonts, icons)

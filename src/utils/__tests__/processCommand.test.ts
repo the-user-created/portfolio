@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { processCommand } from '@/utils/processCommand';
+import { CONTACT } from '@/data/content';
 
 describe('processCommand Utility', () => {
     it('returns help text for "help" command', () => {
@@ -172,7 +173,7 @@ describe('processCommand Utility', () => {
         it('opens github link', () => {
             processCommand('open github');
             expect(windowOpenSpy).toHaveBeenCalledWith(
-                'https://github.com/example',
+                `https://${CONTACT.github}`,
                 '_blank'
             );
         });

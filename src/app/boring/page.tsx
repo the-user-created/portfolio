@@ -1,13 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import {
-    ABOUT,
-    CONTACT,
-    PROJECTS,
-    RESUME_URL,
-    SKILLS,
-    Project,
-} from '@/data/content';
+import { ABOUT, CONTACT, PROJECTS, RESUME_URL, SKILLS } from '@/data/content';
+import type { Project } from '@/types/terminal';
 
 export const metadata: Metadata = {
     title: 'Developer Portfolio | Standard Version',
