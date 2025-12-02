@@ -83,6 +83,7 @@ describe('Terminal Component', () => {
         expect(boringLink).toBeInTheDocument();
         expect(boringLink).toHaveAttribute('href', '/boring');
     });
+
     it('cleans up body styles on unmount', () => {
         // The render function returns an `unmount` method
         const { unmount } = render(<Terminal />);
@@ -179,4 +180,70 @@ describe('Terminal Component', () => {
         // Clean up selection for next test
         window.getSelection()?.removeAllRanges();
     });
+
+    it('triggers and dismisses the matrix animation', async () => {
+        // Prevent infinite loops in MatrixAnimation during fake timer advancement
+        const rafMock = vi
+            .spyOn(window, 'requestAnimationFrame')
+            .mockImplementation(() => 1);
+        const cancelRafMock = vi
+            .spyOn(window, 'cancelAnimationFrame')
+            .mockImplementation(() => {});
+        // Prevent JSDOM "Not implemented" errors and ensure loop doesn't start
+        const getContextMock = vi
+            .spyOn(HTMLCanvasElement.prototype, 'getContext')
+            .mockReturnValue(null);
+
+        vi.useFakeTimers();
+        render(<Terminal />);
+
+        // Fast-forward through boot
+        await act(async () => {
+            vi.runAllTimers();
+        });
+
+        // Check that animation is not visible initially
+        expect(
+            screen.queryByTestId('matrix-animation-canvas')
+        ).not.toBeInTheDocument();
+
+        const input = screen.getByRole('textbox');
+
+        // Type 'matrix' and hit enter
+        fireEvent.change(input, { target: { value: 'matrix' } });
+        fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
+
+        // Check that animation canvas is now rendered.
+        // We use getByTestId because the state change is synchronous and triggered by the event.
+        // Waiting with findByTestId while fake timers are active can cause timeouts.
+        const canvas = screen.getByTestId('matrix-animation-canvas');
+        expect(canvas).toBeInTheDocument();
+
+        // The input should be hidden during animation
+        expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+
+        // Fast-forward time by 5 seconds (the animation duration)
+        // This processes the setTimeout in Terminal.tsx that dismisses the animation
+        await act(async () => {
+            vi.advanceTimersByTime(5000);
+        });
+
+        // Check that animation is gone
+        expect(
+            screen.queryByTestId('matrix-animation-canvas')
+        ).not.toBeInTheDocument();
+
+        // Check that the terminal input is back
+        expect(screen.getByRole('textbox')).toBeInTheDocument();
+
+        // Check for the "Welcome back" message
+        // Use getByText to assert presence immediately after the state update processed in the act() block
+        expect(screen.getByText('Welcome back.')).toBeInTheDocument();
+
+        // Restore mocks
+        rafMock.mockRestore();
+        cancelRafMock.mockRestore();
+        getContextMock.mockRestore();
+        vi.useRealTimers();
+    }, 10000); // Extended timeout to prevent environment lags
 });

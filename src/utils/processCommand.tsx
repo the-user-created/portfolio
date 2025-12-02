@@ -266,8 +266,8 @@ export const processCommand = (input: string): CommandResponse => {
 
         case 'matrix':
             return {
-                output: 'The Matrix has you...',
-                action: { type: 'SET_THEME', payload: 'matrix' },
+                output: 'Entering the Matrix...',
+                action: { type: 'TRIGGER_MATRIX' },
             };
 
         case 'hello':

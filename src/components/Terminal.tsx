@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { TerminalLine } from '@/types/terminal';
 import { processCommand } from '@/utils/processCommand';
 import { BOOT_LOGS, BootLogLine } from '@/data/bootLogs';
+import MatrixAnimation from './MatrixAnimation';
 
 const CRITICAL_FILES = [
     '/bin/kernel',
@@ -36,7 +37,7 @@ export default function Terminal() {
     const [inputMode, setInputMode] = useState<'standard' | 'confirmation'>(
         'standard'
     );
-
+    const [isMatrixAnimating, setIsMatrixAnimating] = useState(false);
     // Meltdown State Machine
     const [isMeltdown, setIsMeltdown] = useState(false);
     const [glitchIntensity, setGlitchIntensity] = useState(0); // 0=None, 1=Text, 2=Screen
@@ -256,7 +257,24 @@ export default function Terminal() {
             return () => timeouts.forEach(clearTimeout);
         }
     }, [isRecovering]);
+    // Matrix Animation Timer Effect
+    useEffect(() => {
+        if (isMatrixAnimating) {
+            const timer = setTimeout(() => {
+                setIsMatrixAnimating(false);
+                setHistory((prev) => [
+                    ...prev,
+                    {
+                        id: getUniqueId('matrix-end'),
+                        type: 'system',
+                        content: 'Welcome back.',
+                    },
+                ]);
+            }, 5000); // Animation duration: 5 seconds
 
+            return () => clearTimeout(timer);
+        }
+    }, [isMatrixAnimating]);
     // Focus input on click anywhere, unless a text selection is being made.
     const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
         // Do not interfere if the user is selecting text
@@ -358,6 +376,10 @@ export default function Terminal() {
                     if (response.action.type === 'SET_THEME') {
                         setTheme(response.action.payload);
                     }
+                    if (response.action.type === 'TRIGGER_MATRIX') {
+                        setTheme('matrix');
+                        setIsMatrixAnimating(true);
+                    }
                     if (response.action.type === 'CONFIRM_DESTRUCTION') {
                         setInputMode('confirmation');
                     }
@@ -386,7 +408,9 @@ export default function Terminal() {
             setInput('');
         }
     };
-
+    if (isMatrixAnimating) {
+        return <MatrixAnimation />;
+    }
     if (isCrashed) {
         return (
             <div className="flex h-screen w-full items-center justify-center bg-black text-red-600">

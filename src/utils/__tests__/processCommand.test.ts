@@ -40,7 +40,10 @@ describe('processCommand Utility', () => {
 
     it('returns SET_THEME action for valid theme', () => {
         const result = processCommand('theme set hacker');
-        expect(result.action).toEqual({ type: 'SET_THEME', payload: 'hacker' });
+        expect(result.action).toEqual({
+            type: 'SET_THEME',
+            payload: 'hacker',
+        });
     });
 
     it('returns error for invalid theme', () => {
@@ -63,10 +66,10 @@ describe('processCommand Utility', () => {
         expect(result.type).not.toBe('error');
     });
 
-    it('activates matrix theme via command', () => {
+    it('returns TRIGGER_MATRIX action for "matrix" command', () => {
         const result = processCommand('matrix');
-        expect(result.action).toEqual({ type: 'SET_THEME', payload: 'matrix' });
-        expect(result.output).toBe('The Matrix has you...');
+        expect(result.action).toEqual({ type: 'TRIGGER_MATRIX' });
+        expect(result.output).toBe('Entering the Matrix...');
     });
 
     it('handles fork bomb attempt', () => {
