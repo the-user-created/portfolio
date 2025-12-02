@@ -77,19 +77,19 @@ describe('Terminal Component', () => {
     it('renders a link to the boring portfolio page', async () => {
         vi.useFakeTimers();
         render(<Terminal />);
-
         // Fast-forward past boot sequence
         act(() => {
             vi.runAllTimers();
         });
-
         vi.useRealTimers();
 
         const boringLink = screen.getByRole('link', {
-            name: /switch to standard portfolio view/i,
+            name: /switch to standard graphical interface/i,
         });
         expect(boringLink).toBeInTheDocument();
         expect(boringLink).toHaveAttribute('href', '/boring');
+
+        expect(screen.getByText('GUI_MODE')).toBeInTheDocument();
     });
 
     it('cleans up body styles on unmount', () => {

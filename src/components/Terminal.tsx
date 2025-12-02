@@ -574,14 +574,15 @@ export default function Terminal() {
                 } as React.CSSProperties
             }
         >
-            {/* A discrete link to the standard, non-interactive portfolio page */}
             <Link
                 href="/boring"
-                className="absolute top-4 right-4 z-10 rounded bg-white/10 px-2 py-1 text-xs text-[var(--term-dim)] transition-colors hover:bg-white/20 hover:text-[var(--term-text)]"
-                aria-label="Switch to standard portfolio view"
+                className="fixed top-6 right-6 z-50 flex items-center gap-2 border border-[var(--term-dim)] bg-[var(--term-bg)]/90 px-4 py-2 text-xs font-bold tracking-widest text-[var(--term-dim)] uppercase backdrop-blur-sm transition-all hover:border-[var(--term-text)] hover:text-[var(--term-text)] hover:shadow-[0_0_10px_var(--term-text)] active:scale-95 md:top-10 md:right-10"
+                aria-label="Switch to standard graphical interface"
             >
-                Standard View
+                <span className="hidden sm:inline">⚠</span>
+                <span>GUI_MODE</span>
             </Link>
+
             <div
                 ref={scrollRef}
                 className="scrollbar-hide h-full w-full overflow-y-auto"
