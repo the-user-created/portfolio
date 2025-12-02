@@ -369,4 +369,17 @@ describe('Terminal Component', () => {
         const container = document.querySelector('.gpu-artifacts');
         expect(container).toHaveClass('h-[100dvh]');
     });
+
+    it('has an accessible label for the input', async () => {
+        vi.useFakeTimers();
+        render(<Terminal />);
+        act(() => {
+            vi.runAllTimers();
+        });
+        vi.useRealTimers();
+        const input = screen.getByRole('textbox', {
+            name: /terminal command input/i,
+        });
+        expect(input).toBeInTheDocument();
+    });
 });

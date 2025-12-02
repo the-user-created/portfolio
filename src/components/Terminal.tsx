@@ -634,6 +634,7 @@ export default function Terminal() {
                             autoFocus
                             autoComplete="off"
                             spellCheck="false"
+                            aria-label="Terminal Command Input"
                         />
                     </div>
                 )}

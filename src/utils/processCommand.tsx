@@ -190,7 +190,7 @@ export const processCommand = (
                                             href={job.link}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="text-xs text-[var(--term-dim)] underline hover:text-[var(--term-text)]"
+                                            className="text-xs text-[var(--term-prompt)] underline hover:text-[var(--term-text)]"
                                         >
                                             [link]
                                         </a>
@@ -282,7 +282,7 @@ export const processCommand = (
                                             href={vol.link}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="text-xs text-[var(--term-dim)] underline hover:text-[var(--term-text)]"
+                                            className="text-xs text-[var(--term-prompt)] underline hover:text-[var(--term-text)]"
                                         >
                                             [link]
                                         </a>
@@ -352,7 +352,7 @@ export const processCommand = (
                         </ul>
                         <span className="mt-2 text-[var(--term-dim)] italic">
                             Usage: type &#39;project &lt;id&gt;&#39; to load
-                            data shard (e.g., &#39;project fers&#39;)
+                            data shard (e.g., &#39;project fers-fyp&#39;)
                         </span>
                     </div>
                 ),

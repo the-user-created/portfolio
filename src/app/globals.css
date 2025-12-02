@@ -9,44 +9,44 @@
     --term-text: #4ade80; /* green-400 */
     --term-prompt: #ffffff;
     --term-error: #ef4444;
-    --term-dim: #71717a;
-
+    --term-dim: #a1a1aa;
     --font-mono: 'Courier New', Courier, monospace;
 }
 
 /* Hacker Theme */
 [data-theme='hacker'] {
     --term-bg: #000000;
-    --term-text: #22c55e;
-    --term-prompt: #16a34a;
-    --term-error: #dc2626;
+    --term-text: #4ade80;
+    --term-prompt: #22c55e;
+    --term-error: #ef4444;
+    --term-dim: #86efac;
 }
 
 /* Light Theme */
 [data-theme='light'] {
     --term-bg: #ffffff;
-    --term-text: #1f2937;
+    --term-text: #111827;
     --term-prompt: #000000;
-    --term-error: #b91c1c;
-    --term-dim: #9ca3af;
+    --term-error: #dc2626;
+    --term-dim: #4b5563;
 }
 
 /* Solarized Theme */
 [data-theme='solarized'] {
     --term-bg: #002b36;
-    --term-text: #839496;
-    --term-prompt: #268bd2;
-    --term-error: #dc322f;
-    --term-dim: #586e75;
+    --term-text: #eee8d5;
+    --term-prompt: #2aa198;
+    --term-error: #ff5f5f;
+    --term-dim: #93a1a1;
 }
 
 /* Matrix Theme */
 [data-theme='matrix'] {
     --term-bg: #000000;
     --term-text: #00ff00;
-    --term-prompt: #008f11;
+    --term-prompt: #00cc00;
     --term-error: #ff0000;
-    --term-dim: #003b00;
+    --term-dim: #22c55e;
     text-shadow: 0 0 5px #00ff00;
 }
 

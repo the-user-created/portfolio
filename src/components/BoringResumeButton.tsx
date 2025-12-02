@@ -6,7 +6,7 @@ import React from 'react';
 // Define loading state locally to match button styling
 const ResumeButtonLoading = () => (
     <button
-        className="cursor-wait rounded-lg border border-black px-6 py-3 font-medium text-black opacity-50"
+        className="cursor-wait rounded-lg border border-black px-6 py-3 font-medium text-black opacity-75"
         disabled
     >
         Loading PDF Engine...
