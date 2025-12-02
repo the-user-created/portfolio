@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: 'Terminal Portfolio',
+    title: 'David Young - Portfolio',
     description: `Interactive command-line portfolio for ${ABOUT.name}, a ${ABOUT.role}.`,
     authors: [{ name: ABOUT.name }],
     keywords: [

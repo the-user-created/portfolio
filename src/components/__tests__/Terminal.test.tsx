@@ -353,12 +353,20 @@ describe('Terminal Component', () => {
             screen.getByText(/Connection to remote host closed/i)
         ).toBeInTheDocument();
 
-        // Fast forward the 1.5s delay
+        // Fast-forward the 1.5s delay
         await act(async () => {
             vi.advanceTimersByTime(1500);
         });
 
         // Verify router push was called with correct path
         expect(pushMock).toHaveBeenCalledWith('/boring');
+    });
+
+    it('uses dynamic viewport height for mobile compatibility', () => {
+        render(<Terminal />);
+        // The container usually has the 'gpu-artifacts' class
+        // We select the outer div and check for the dynamic height class
+        const container = document.querySelector('.gpu-artifacts');
+        expect(container).toHaveClass('h-[100dvh]');
     });
 });

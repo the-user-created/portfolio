@@ -155,27 +155,54 @@ export default function Terminal() {
                 }
                 return;
             }
-            const currentLine = bootSequence[lineIndex];
-            const elapsed = (performance.now() - bootStartTime.current) / 1000;
-            const timestamp = `[${elapsed.toFixed(6).padStart(12, ' ')}] `;
-            setHistory((prev) => [
-                ...prev,
-                {
+
+            // BATCHING LOGIC:
+            // Mobile browsers struggle with 135+ rapid React state updates.
+            // We group "noise" lines (no specific delay) into chunks of 3
+            // to reduce render cycles and ensure sub-3s boot time.
+            const newLines: TerminalLine[] = [];
+            let tempIndex = lineIndex;
+            const BATCH_SIZE = 3;
+
+            while (tempIndex < bootSequence.length) {
+                const line = bootSequence[tempIndex];
+                const elapsed =
+                    (performance.now() - bootStartTime.current) / 1000;
+                const timestamp = `[${elapsed.toFixed(6).padStart(12, ' ')}] `;
+
+                newLines.push({
                     id: getUniqueId('boot'),
                     type: 'system',
-                    content: timestamp + currentLine.text,
-                },
-            ]);
+                    content: timestamp + line.text,
+                });
 
-            lineIndex++;
+                tempIndex++;
 
-            const delay =
-                currentLine.delay ?? Math.floor(Math.random() * 15) + 5;
+                // Stop batching if:
+                // 1. This line has a specific delay (needs emphasis)
+                // 2. We reached the batch limit
+                if (line.delay || newLines.length >= BATCH_SIZE) {
+                    break;
+                }
+            }
 
-            timeoutId = setTimeout(processBootLog, delay);
+            // Single State Update for the batch
+            setHistory((prev) => [...prev, ...newLines]);
+
+            // Advance the real index
+            lineIndex = tempIndex;
+
+            // Determine delay for the next tick
+            // If the last line in this batch had a specific delay, respect it.
+            // Otherwise, use a fast constant (20ms) to keep the text flying.
+            const lastLine = bootSequence[tempIndex - 1];
+            const nextDelay = lastLine?.delay ?? 20;
+
+            timeoutId = setTimeout(processBootLog, nextDelay);
         };
 
-        timeoutId = setTimeout(processBootLog, 100);
+        // Start immediately
+        timeoutId = setTimeout(processBootLog, 0);
 
         return () => clearTimeout(timeoutId);
     }, []);
@@ -540,7 +567,7 @@ export default function Terminal() {
 
     return (
         <div
-            className={`gpu-artifacts relative h-screen w-full overflow-hidden bg-[var(--term-bg)] p-4 text-base text-[var(--term-text)] transition-colors duration-300 md:p-8 ${isFrozen ? 'brightness-150 contrast-200 invert saturate-0 filter' : ''}`}
+            className={`gpu-artifacts relative h-[100dvh] w-full overflow-hidden bg-[var(--term-bg)] p-4 text-base text-[var(--term-text)] transition-colors duration-300 md:p-8 ${isFrozen ? 'brightness-150 contrast-200 invert saturate-0 filter' : ''}`}
             style={
                 {
                     '--artifact-opacity': glitchIntensity >= 2 ? 0.8 : 0,
@@ -578,7 +605,7 @@ export default function Terminal() {
                 </div>
 
                 {!isBooting && !isMeltdown && (
-                    <div className="mt-2 flex items-center">
+                    <div className="mt-2 flex items-center pb-[max(1rem,env(safe-area-inset-bottom))]">
                         <span className="mr-2 font-bold text-[var(--term-prompt)]">
                             {inputMode === 'confirmation' ? '?' : '>'}
                         </span>

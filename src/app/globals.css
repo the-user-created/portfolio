@@ -62,6 +62,7 @@ body {
     color: var(--term-text);
     font-family: var(--font-mono);
     overflow: hidden;
+    min-height: 100dvh;
     transition:
         background-color 0.3s ease,
         color 0.3s ease;

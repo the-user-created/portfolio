@@ -10,6 +10,11 @@ export type TerminalAction =
     | { type: 'TRIGGER_MATRIX' }
     | { type: 'EXIT_SESSION' };
 
+/**
+ * Represents a single line in the terminal output.
+ * Layout Note: The input line associated with the terminal uses
+ * safe-area-inset-bottom to support mobile devices with notches/home bars.
+ */
 export interface TerminalLine {
     id: string;
     type: LineType;
