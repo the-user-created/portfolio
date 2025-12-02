@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { TerminalLine } from '@/types/terminal';
 import { processCommand } from '@/utils/processCommand';
 import { BOOT_LOGS, BootLogLine } from '@/data/bootLogs';
+import { COMMANDS, COMMAND_SYNONYMS } from '@/data/content';
 import MatrixAnimation from './MatrixAnimation';
 
 const CRITICAL_FILES = [
@@ -37,6 +38,10 @@ export default function Terminal() {
     const [inputMode, setInputMode] = useState<'standard' | 'confirmation'>(
         'standard'
     );
+    // New state for autocomplete
+    const [suggestions, setSuggestions] = useState<string[]>([]);
+    const [suggestionIndex, setSuggestionIndex] = useState(0);
+
     const [isMatrixAnimating, setIsMatrixAnimating] = useState(false);
     // Meltdown State Machine
     const [isMeltdown, setIsMeltdown] = useState(false);
@@ -51,6 +56,17 @@ export default function Terminal() {
     const scrollRef = useRef<HTMLDivElement>(null);
     const lineIdCounter = useRef(0);
     const bootStartTime = useRef(0);
+
+    // Create a memoized list of all commands for autocomplete
+    const allPossibleCommands = useMemo(() => {
+        const mainCommands = COMMANDS.map((c) => c.cmd);
+        const synonymMapKeys = Object.keys(COMMAND_SYNONYMS);
+        // Use a Set to handle potential duplicates
+        const allSynonyms = COMMANDS.flatMap((c) => c.synonyms || []);
+        return [
+            ...new Set([...mainCommands, ...synonymMapKeys, ...allSynonyms]),
+        ].sort();
+    }, []);
 
     // Helper to generate unique IDs for terminal lines
     const getUniqueId = (prefix: string = 'line'): string => {
@@ -296,6 +312,33 @@ export default function Terminal() {
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Tab') {
+            e.preventDefault();
+            if (input.trim() === '') return;
+
+            let currentSuggestions = suggestions;
+            let currentSuggestionIndex = suggestionIndex;
+
+            // If we don't have suggestions, generate new ones
+            if (currentSuggestions.length === 0) {
+                currentSuggestions = allPossibleCommands.filter((cmd) =>
+                    cmd.startsWith(input.toLowerCase())
+                );
+                if (currentSuggestions.length === 0) return; // No matches
+
+                setSuggestions(currentSuggestions);
+                currentSuggestionIndex = 0;
+            } else {
+                // Cycle through existing suggestions
+                currentSuggestionIndex =
+                    (currentSuggestionIndex + 1) % currentSuggestions.length;
+            }
+
+            setInput(currentSuggestions[currentSuggestionIndex]);
+            setSuggestionIndex(currentSuggestionIndex);
+            return;
+        }
+
         if (e.key === 'ArrowUp') {
             e.preventDefault();
             if (commandHistory.length > 0) {
@@ -318,6 +361,11 @@ export default function Terminal() {
             return;
         }
         if (e.key === 'Enter') {
+            // Reset autocomplete state before processing command
+            if (suggestions.length > 0) {
+                setSuggestions([]);
+                setSuggestionIndex(0);
+            }
             const cmd = input.trim();
 
             // Handle Confirmation Mode
@@ -483,7 +531,14 @@ export default function Terminal() {
                             ref={inputRef}
                             type="text"
                             value={input}
-                            onChange={(e) => setInput(e.target.value)}
+                            onChange={(e) => {
+                                setInput(e.target.value);
+                                // Reset autocomplete state when user types manually
+                                if (suggestions.length > 0) {
+                                    setSuggestions([]);
+                                    setSuggestionIndex(0);
+                                }
+                            }}
                             onKeyDown={handleKeyDown}
                             className="w-full bg-transparent text-[var(--term-text)] caret-[var(--term-prompt)] outline-none"
                             autoFocus

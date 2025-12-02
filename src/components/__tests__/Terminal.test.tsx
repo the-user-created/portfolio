@@ -127,6 +127,46 @@ describe('Terminal Component', () => {
         expect(input).toHaveValue('');
     });
 
+    it('autocompletes commands with Tab and resets on manual change', async () => {
+        vi.useFakeTimers();
+        render(<Terminal />);
+        act(() => {
+            vi.runAllTimers(); // Finish boot
+        });
+        vi.useRealTimers();
+        const input = screen.getByRole('textbox');
+
+        // === Test cycling through multiple suggestions ===
+        fireEvent.change(input, { target: { value: 'pro' } });
+
+        // First tab should complete to 'project' (alphabetical order)
+        fireEvent.keyDown(input, { key: 'Tab', code: 'Tab' });
+        expect(input).toHaveValue('project');
+
+        // Second tab should cycle to 'projects'
+        fireEvent.keyDown(input, { key: 'Tab', code: 'Tab' });
+        expect(input).toHaveValue('projects');
+
+        // Third tab should cycle back to 'project'
+        fireEvent.keyDown(input, { key: 'Tab', code: 'Tab' });
+        expect(input).toHaveValue('project');
+
+        // === Test reset on manual input change ===
+        // Manually type 'a' at the end, which should reset suggestions internally
+        fireEvent.change(input, { target: { value: 'projecta' } });
+
+        // Now type a new partial command
+        fireEvent.change(input, { target: { value: 'cle' } });
+
+        // Tab again should start a new suggestion cycle for 'cle' -> 'clear'
+        fireEvent.keyDown(input, { key: 'Tab', code: 'Tab' });
+        expect(input).toHaveValue('clear');
+
+        // Tabbing again with a single match should not change it
+        fireEvent.keyDown(input, { key: 'Tab', code: 'Tab' });
+        expect(input).toHaveValue('clear');
+    });
+
     it('handles focus correctly on click, preserving text selection', async () => {
         vi.useFakeTimers();
         // Render the component and a dummy button to reliably control focus
