@@ -43,4 +43,6 @@ export interface Project {
     reportUrl?: string;
     github?: string;
     link?: string;
+    appStoreUrl?: string;
+    playStoreUrl?: string;
 }

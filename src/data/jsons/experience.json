@@ -1,5 +1,41 @@
 [
     {
+        "company": "astraen",
+        "role": "Founder & Principal Engineer",
+        "period": "2024 - Present",
+        "link": "https://astraen.dev",
+        "description": "Boutique software development focusing on quality, performance, and clean architecture.",
+        "details": [
+            "Specializing in transforming raw ideas into actionable technical blueprints.",
+            "Architecting robust, scalable, and maintainable foundations for modern applications.",
+            "Executing full-cycle development from concept and strategy to deployment and quality assurance."
+        ],
+        "tech": [
+            "Next.js",
+            "Svelte",
+            "Flutter",
+            "Dart",
+            "Python",
+            "Docker",
+            "Rust",
+            "Firebase",
+            "SQLite"
+        ]
+    },
+    {
+        "company": "The DataFlow",
+        "role": "Co-founder & Founding Engineer",
+        "period": "Nov 2024 - Jul 2025",
+        "description": "Led engineering for a mobile app empowering users to monitor and control mobile data usage.",
+        "details": [
+            "Built the full stack from the ground up in Flutter/Dart and Kotlin.",
+            "Implemented a custom on-device firewall using Android VpnService.",
+            "Established the app's architecture, local database design (Drift/SQLite), and CI/CD workflows.",
+            "Integrated Firebase for authentication, analytics, and crash reporting."
+        ],
+        "tech": ["Flutter", "Kotlin", "Firebase", "SQLite", "Riverpod"]
+    },
+    {
         "company": "Arixian",
         "role": "Software Engineering Intern",
         "period": "November 2023 - January 2024",

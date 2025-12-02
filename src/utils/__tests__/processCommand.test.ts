@@ -30,7 +30,7 @@ describe('processCommand Utility', () => {
     });
 
     it('returns valid project for correct id', () => {
-        const result = processCommand('project fers');
+        const result = processCommand('project fers-fyp');
         expect(result.type).not.toBe('error');
         expect(result.output).toBeDefined();
     });
@@ -112,7 +112,7 @@ describe('processCommand Utility', () => {
         });
 
         it('resolves "cd fers" to the "project fers" command', () => {
-            const result = processCommand('cd fers');
+            const result = processCommand('cd fers-fyp');
             expect(result.type).not.toBe('error');
             expect(result.output).toBeDefined();
         });

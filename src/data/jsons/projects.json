@@ -1,8 +1,60 @@
 [
     {
-        "id": "fers",
-        "name": "FERS Neuro-Upgrade",
-        "title": "Modernising the FERS Software Package",
+        "id": "fers-monorepo",
+        "name": "FERS (Masters)",
+        "title": "The Flexible Extensible Radar Simulator (Masters)",
+        "description": "A comprehensive suite of tools for signal-level radar simulation including a C++23 core and React/Tauri UI.",
+        "stack": ["C++23", "Rust", "Tauri", "React", "TypeScript", "CMake"],
+        "github": "https://github.com/the-user-created/FERS",
+        "overview": "FERS is a signal-level radar simulator structured as a monorepo containing a high-performance C++23 simulation engine (libfers) and a modern desktop UI (fers-ui). It enables the construction and visualization of complex radar scenarios with a unified event-driven architecture.",
+        "objectives": [
+            "Modernize the legacy C++98 engine to C++23 with a unified event-driven architecture.",
+            "Develop a cross-platform desktop UI using Tauri and React for scenario visualization.",
+            "Implement a stable C-API and XML schema contract for interoperability.",
+            "Ensure high-performance simulation of mono/multistatic and pulsed/CW systems."
+        ],
+        "challenges": "Balancing performance optimizations with code maintainability during the modernization process. Designing an intuitive UI that effectively visualizes complex radar scenarios and data.",
+        "results": "Successfully designed and implemented a modern radar simulation suite with significant performance improvements and an enhanced user experience. The project demonstrated the viability of using modern C++ and web technologies for complex simulation tasks."
+    },
+    {
+        "id": "rainvu",
+        "name": "RainVu",
+        "title": "RainVu: Rainfall Logger & Analytics",
+        "description": "A modern Flutter app for tracking rainfall data with powerful local-first analytics.",
+        "stack": ["Flutter", "Dart", "Riverpod", "SQLite", "Firebase"],
+        "github": "https://github.com/astraen-dev/RainVu",
+        "appStoreUrl": "https://apps.apple.com/us/app/rainvu/id6754812264",
+        "playStoreUrl": "https://play.google.com/store/apps/details?id=com.astraen.rainvu",
+        "overview": "RainVu is a privacy-focused mobile application for farmers and weather enthusiasts to log and analyze rainfall data. It features a local-first architecture using Drift (SQLite) for offline capability and custom charting for historical analysis.",
+        "objectives": [
+            "Build a robust local-first architecture using Drift and Riverpod.",
+            "Implement complex analytics for MTD/YTD totals and seasonal trends.",
+            "Ensure data portability with JSON/CSV export and import features."
+        ],
+        "challenges": "Designing a responsive charting interface that handles large historical datasets smoothly on mobile devices. Managing complex state synchronization between local databases and UI states.",
+        "results": "Released a fully featured app with secure local storage, diverse chart visualizations, and a seamless user experience across Android and iOS platforms."
+    },
+    {
+        "id": "notaro",
+        "name": "Notaro",
+        "title": "Notaro: Self-Hostable Note Ecosystem",
+        "description": "A lightweight, open-source note-taking suite with a shared Rust core across Desktop, Mobile, and Web.",
+        "stack": ["Rust", "Tauri", "SvelteKit", "Flutter", "Docker"],
+        "github": "https://github.com/astraen-dev/notaro",
+        "overview": "Notaro is an experimental monorepo project showcasing a unified business logic layer written in Rust. The core crate (`notaro_core`) handles database syncing and conflict resolution, shared across a Tauri desktop app, a Flutter mobile app (via FFI), and a SvelteKit web app (via WASM).",
+        "objectives": [
+            "Architect a platform-agnostic Rust core library.",
+            "Implement FFI bindings for Flutter and WASM compilation for the Web.",
+            "Develop a self-hostable sync server using Rust and WebSockets.",
+            "Create a cohesive user experience across three distinct frontend frameworks."
+        ],
+        "challenges": "Managing the complexity of cross-compilation for FFI and WASM targets within a single monorepo. Implementing conflict-free data synchronization logic (CRDTs/Diffs) in the core library.",
+        "results": "TBD"
+    },
+    {
+        "id": "fers-fyp",
+        "name": "FERS (FYP)",
+        "title": "Modernising the FERS Software Package (Undergrad)",
         "description": "Dragging a legacy radar simulator (FERS) from C++98/03 into the C++20/23 era.",
         "stack": ["C++20/23", "GitHub Actions", "CMake", "Valgrind", "HDF5"],
         "github": "https://github.com/the-user-created/FERS",
