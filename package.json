@@ -41,7 +41,7 @@
         "tailwindcss": "^4.1.17",
         "typescript": "^5.9.3",
         "vite-tsconfig-paths": "^5.1.4",
-        "vitest": "^4.0.14"
+        "vitest": "^4.0.15"
     },
     "lint-staged": {
         "*.{md,json,yml,yaml}": "prettier --write",
