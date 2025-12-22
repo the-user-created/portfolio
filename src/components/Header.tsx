@@ -1,4 +1,5 @@
 import { ABOUT, CONTACT } from '@/data/content';
+import Link from 'next/link';
 
 export default function Header() {
     return (
@@ -32,6 +33,10 @@ export default function Header() {
                 >
                     LinkedIn
                 </a>
+                <span className="text-gray-300">|</span>
+                <Link href="/blog" className="text-blue-600 hover:underline">
+                    Blog
+                </Link>
             </div>
         </header>
     );
