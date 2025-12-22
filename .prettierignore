@@ -8,6 +8,9 @@
 .next/
 next-env.d.ts
 
+# Coverage
+coverage/
+
 # Other
 venv
 design_docs

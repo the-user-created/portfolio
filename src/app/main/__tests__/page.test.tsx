@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import PortfolioPage from '../page';
 import {
@@ -181,5 +181,42 @@ describe('PortfolioPage', () => {
             name: /download resume/i,
         });
         expect(resumeBtn).toBeInTheDocument();
+    });
+
+    it('opens project detail modal when clicking a project title', () => {
+        render(<PortfolioPage />);
+
+        // Find the first project in the list
+        const firstProject = PROJECTS[0];
+
+        // Find the project article
+        const projectHeading = screen.getByRole('heading', {
+            name: firstProject.title,
+        });
+        const triggerButton = within(projectHeading).getByRole('button');
+
+        // Click to open modal
+        fireEvent.click(triggerButton);
+
+        // Check if modal content is visible (Look for content specific to the modal view, like "Key Objectives")
+        // Note: The modal renders in a portal or simply fixed on top.
+        const modal = screen.getByRole('dialog');
+        expect(modal).toBeInTheDocument();
+
+        // Check for specific detail text inside the modal
+        if (firstProject.objectives) {
+            expect(
+                within(modal).getByText('Key Objectives')
+            ).toBeInTheDocument();
+            expect(
+                within(modal).getByText(firstProject.objectives[0])
+            ).toBeInTheDocument();
+        }
+
+        // Close modal
+        const closeButton = within(modal).getByLabelText('Close modal');
+        fireEvent.click(closeButton);
+
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });
 });
