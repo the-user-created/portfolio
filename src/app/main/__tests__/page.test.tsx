@@ -1,6 +1,6 @@
-import { render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import BoringPortfolioPage from '../page';
+import PortfolioPage from '../page';
 import {
     ABOUT,
     AWARDS,
@@ -21,9 +21,9 @@ vi.mock('next/dynamic', () => ({
     },
 }));
 
-describe('BoringPortfolioPage', () => {
+describe('PortfolioPage', () => {
     it('renders all main sections of the portfolio', () => {
-        render(<BoringPortfolioPage />);
+        render(<PortfolioPage />);
 
         // Check for header content
         expect(
@@ -47,7 +47,7 @@ describe('BoringPortfolioPage', () => {
     });
 
     it('renders skills and projects from the data source', () => {
-        render(<BoringPortfolioPage />);
+        render(<PortfolioPage />);
 
         const skillsSection = screen.getByRole('region', {
             name: /technical skills/i,
@@ -76,7 +76,7 @@ describe('BoringPortfolioPage', () => {
     });
 
     it('renders experience items', () => {
-        render(<BoringPortfolioPage />);
+        render(<PortfolioPage />);
         const expSection = screen.getByRole('region', { name: /experience/i });
 
         EXPERIENCE.forEach((job) => {
@@ -88,7 +88,7 @@ describe('BoringPortfolioPage', () => {
     });
 
     it('renders contact information with correct links', () => {
-        render(<BoringPortfolioPage />);
+        render(<PortfolioPage />);
 
         // There may be multiple links (header and footer), grabbing all
         const emailLinks = screen.getAllByRole('link', { name: CONTACT.email });
@@ -104,17 +104,8 @@ describe('BoringPortfolioPage', () => {
         expect(githubLink).toHaveAttribute('href', `https://${CONTACT.github}`);
     });
 
-    it('contains a link back to the terminal version', () => {
-        render(<BoringPortfolioPage />);
-        const terminalLink = screen.getByRole('link', {
-            name: /switch to terminal mode/i,
-        });
-        expect(terminalLink).toBeInTheDocument();
-        expect(terminalLink).toHaveAttribute('href', '/');
-    });
-
     it('renders experience items with optional links', () => {
-        render(<BoringPortfolioPage />);
+        render(<PortfolioPage />);
         const expSection = screen.getByRole('region', { name: /experience/i });
 
         EXPERIENCE.forEach((job) => {
@@ -134,7 +125,7 @@ describe('BoringPortfolioPage', () => {
     });
 
     it('renders project links including PDF reports', () => {
-        render(<BoringPortfolioPage />);
+        render(<PortfolioPage />);
 
         PROJECTS.forEach((project) => {
             const projectArticle = screen.getByRole('article', {
@@ -160,7 +151,7 @@ describe('BoringPortfolioPage', () => {
     });
 
     it('renders awards and volunteer links correctly', () => {
-        render(<BoringPortfolioPage />);
+        render(<PortfolioPage />);
         // Check Awards links
         AWARDS.forEach((award) => {
             if (award.link) {
@@ -185,10 +176,47 @@ describe('BoringPortfolioPage', () => {
     });
 
     it('renders the resume download button', () => {
-        render(<BoringPortfolioPage />);
+        render(<PortfolioPage />);
         const resumeBtn = screen.getByRole('button', {
             name: /download resume/i,
         });
         expect(resumeBtn).toBeInTheDocument();
+    });
+
+    it('opens project detail modal when clicking a project title', () => {
+        render(<PortfolioPage />);
+
+        // Find the first project in the list
+        const firstProject = PROJECTS[0];
+
+        // Find the project article
+        const projectHeading = screen.getByRole('heading', {
+            name: firstProject.title,
+        });
+        const triggerButton = within(projectHeading).getByRole('button');
+
+        // Click to open modal
+        fireEvent.click(triggerButton);
+
+        // Check if modal content is visible (Look for content specific to the modal view, like "Key Objectives")
+        // Note: The modal renders in a portal or simply fixed on top.
+        const modal = screen.getByRole('dialog');
+        expect(modal).toBeInTheDocument();
+
+        // Check for specific detail text inside the modal
+        if (firstProject.objectives) {
+            expect(
+                within(modal).getByText('Key Objectives')
+            ).toBeInTheDocument();
+            expect(
+                within(modal).getByText(firstProject.objectives[0])
+            ).toBeInTheDocument();
+        }
+
+        // Close modal
+        const closeButton = within(modal).getByLabelText('Close modal');
+        fireEvent.click(closeButton);
+
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });
 });

@@ -13,6 +13,7 @@ import {
     CONTACT,
     EDUCATION,
     EXPERIENCE,
+    INTERESTS,
     PROJECTS,
     SKILLS,
 } from '@/data/content';
@@ -254,6 +255,19 @@ const ResumeDocument = () => (
                             <Text style={styles.itemDate}>{edu.year}</Text>
                         </View>
                         <Text style={{ fontSize: 9 }}>{edu.details}</Text>
+                    </View>
+                ))}
+            </View>
+
+            {/* Interests */}
+            <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Interests</Text>
+                {INTERESTS.map((interest, index) => (
+                    <View key={index} style={styles.item}>
+                        <Text style={styles.itemTitle}>{interest.title}</Text>
+                        <Text style={{ fontSize: 9, color: '#444' }}>
+                            {interest.description}
+                        </Text>
                     </View>
                 ))}
             </View>
