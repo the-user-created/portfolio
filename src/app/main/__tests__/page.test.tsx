@@ -1,6 +1,6 @@
 import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import BoringPortfolioPage from '../page';
+import PortfolioPage from '../page';
 import {
     ABOUT,
     AWARDS,
@@ -21,9 +21,9 @@ vi.mock('next/dynamic', () => ({
     },
 }));
 
-describe('BoringPortfolioPage', () => {
+describe('PortfolioPage', () => {
     it('renders all main sections of the portfolio', () => {
-        render(<BoringPortfolioPage />);
+        render(<PortfolioPage />);
 
         // Check for header content
         expect(
@@ -47,7 +47,7 @@ describe('BoringPortfolioPage', () => {
     });
 
     it('renders skills and projects from the data source', () => {
-        render(<BoringPortfolioPage />);
+        render(<PortfolioPage />);
 
         const skillsSection = screen.getByRole('region', {
             name: /technical skills/i,
@@ -76,7 +76,7 @@ describe('BoringPortfolioPage', () => {
     });
 
     it('renders experience items', () => {
-        render(<BoringPortfolioPage />);
+        render(<PortfolioPage />);
         const expSection = screen.getByRole('region', { name: /experience/i });
 
         EXPERIENCE.forEach((job) => {
@@ -88,7 +88,7 @@ describe('BoringPortfolioPage', () => {
     });
 
     it('renders contact information with correct links', () => {
-        render(<BoringPortfolioPage />);
+        render(<PortfolioPage />);
 
         // There may be multiple links (header and footer), grabbing all
         const emailLinks = screen.getAllByRole('link', { name: CONTACT.email });
@@ -104,17 +104,8 @@ describe('BoringPortfolioPage', () => {
         expect(githubLink).toHaveAttribute('href', `https://${CONTACT.github}`);
     });
 
-    it('contains a link back to the terminal version', () => {
-        render(<BoringPortfolioPage />);
-        const terminalLink = screen.getByRole('link', {
-            name: /switch to terminal mode/i,
-        });
-        expect(terminalLink).toBeInTheDocument();
-        expect(terminalLink).toHaveAttribute('href', '/');
-    });
-
     it('renders experience items with optional links', () => {
-        render(<BoringPortfolioPage />);
+        render(<PortfolioPage />);
         const expSection = screen.getByRole('region', { name: /experience/i });
 
         EXPERIENCE.forEach((job) => {
@@ -134,7 +125,7 @@ describe('BoringPortfolioPage', () => {
     });
 
     it('renders project links including PDF reports', () => {
-        render(<BoringPortfolioPage />);
+        render(<PortfolioPage />);
 
         PROJECTS.forEach((project) => {
             const projectArticle = screen.getByRole('article', {
@@ -160,7 +151,7 @@ describe('BoringPortfolioPage', () => {
     });
 
     it('renders awards and volunteer links correctly', () => {
-        render(<BoringPortfolioPage />);
+        render(<PortfolioPage />);
         // Check Awards links
         AWARDS.forEach((award) => {
             if (award.link) {
@@ -185,7 +176,7 @@ describe('BoringPortfolioPage', () => {
     });
 
     it('renders the resume download button', () => {
-        render(<BoringPortfolioPage />);
+        render(<PortfolioPage />);
         const resumeBtn = screen.getByRole('button', {
             name: /download resume/i,
         });

@@ -15,11 +15,11 @@ const ResumeButtonLoading = () => (
 
 // Dynamically import the implementation component.
 // Using ssr: false here works because this file is marked 'use client'.
-const BoringResumeLink = dynamic(() => import('./BoringResumeLink'), {
+const ResumeLink = dynamic(() => import('././ResumeLink'), {
     ssr: false,
     loading: () => <ResumeButtonLoading />,
 });
 
-export default function BoringResumeButton() {
-    return <BoringResumeLink />;
+export default function ResumeButton() {
+    return <ResumeLink />;
 }

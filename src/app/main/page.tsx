@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
-import BoringResumeButton from '@/components/BoringResumeButton';
+import ResumeButton from '@/components/ResumeButton';
 import {
     ABOUT,
     AWARDS,
@@ -11,7 +10,7 @@ import {
     SKILLS,
     VOLUNTEER,
 } from '@/data/content';
-import type { Project } from '@/types/terminal';
+import type { Project } from '@/types/project';
 
 export const metadata: Metadata = {
     title: 'Developer Portfolio | Standard Version',
@@ -45,11 +44,8 @@ const PlayStoreIcon = () => (
 
 /**
  * A standard, SEO-optimized portfolio page.
- * This page is hidden from the main terminal UI but is accessible
- * to screen readers and search engine crawlers for better accessibility
- * and discoverability.
  */
-export default function BoringPortfolioPage() {
+export default function PortfolioPage() {
     return (
         <div className="mx-auto max-w-4xl bg-white p-8 font-sans text-gray-800">
             {/* Header */}
@@ -386,7 +382,7 @@ export default function BoringPortfolioPage() {
                         >
                             Email Me
                         </a>
-                        <BoringResumeButton />
+                        <ResumeButton />
                     </div>
                 </section>
             </main>
@@ -395,14 +391,6 @@ export default function BoringPortfolioPage() {
                 <p>
                     &copy; {new Date().getFullYear()} {ABOUT.name}. All rights
                     reserved.
-                </p>
-                <p className="mt-2">
-                    <Link
-                        href="/"
-                        className="font-medium text-blue-600 underline hover:text-blue-800"
-                    >
-                        Switch to Terminal Mode
-                    </Link>
                 </p>
             </footer>
         </div>
