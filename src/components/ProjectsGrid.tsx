@@ -42,17 +42,23 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
                     <article
                         key={project.id}
                         aria-labelledby={`project-heading-${project.id}`}
-                        className="group relative flex flex-col gap-1 rounded-lg border border-transparent p-4 transition-colors hover:border-gray-100 hover:bg-gray-50"
+                        className="group relative cursor-pointer rounded-lg border border-transparent p-4 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:border-gray-200/75 hover:bg-gray-50 hover:shadow-lg focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:outline-none"
+                        onClick={() => setSelectedProject(project)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                setSelectedProject(project);
+                            }
+                        }}
+                        tabIndex={0}
+                        role="button"
                     >
                         <div className="flex flex-col gap-1">
                             <h3
                                 id={`project-heading-${project.id}`}
-                                className="cursor-pointer text-2xl font-bold group-hover:text-blue-700"
-                                onClick={() => setSelectedProject(project)}
+                                className="text-2xl font-bold group-hover:text-blue-700"
                             >
-                                <button className="text-left focus:underline focus:outline-none">
-                                    {project.title}
-                                </button>
+                                {project.title}
                             </h3>
 
                             <div className="text-sm text-gray-500 italic">
@@ -65,13 +71,6 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
 
                             {/* Action Row */}
                             <div className="mt-3 flex flex-wrap items-center gap-4">
-                                <button
-                                    onClick={() => setSelectedProject(project)}
-                                    className="text-sm font-medium text-blue-600 hover:underline"
-                                >
-                                    Read Details &rarr;
-                                </button>
-
                                 {project.github && (
                                     <a
                                         href={project.github}

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Project } from '@/types/project';
 
@@ -8,28 +8,57 @@ interface ProjectModalProps {
 }
 
 export default function ProjectModal({ project, onClose }: ProjectModalProps) {
-    // Prevent background scrolling when modal is open
+    const [isMounted, setIsMounted] = useState(false);
+
     useEffect(() => {
+        // Animate in
+        setIsMounted(true);
+        // Prevent background scrolling
         document.body.style.overflow = 'hidden';
+
+        // Cleanup function for unmount
         return () => {
             document.body.style.overflow = 'auto';
         };
     }, []);
 
+    // Function to handle the closing sequence
+    const handleClose = () => {
+        setIsMounted(false); // Trigger exit animation
+        setTimeout(onClose, 300); // Unmount component after animation
+    };
+
+    // Add keyboard listener for Escape key
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                handleClose();
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [onClose]);
+
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm transition-opacity"
-            onClick={onClose}
+            className={`fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm transition-opacity duration-300 ease-out ${
+                isMounted ? 'opacity-100' : 'opacity-0'
+            }`}
+            onClick={handleClose}
             role="dialog"
             aria-modal="true"
+            aria-labelledby={`modal-title-${project.id}`}
         >
             <div
-                className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-xl bg-white p-8 shadow-2xl"
+                className={`relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-xl bg-white p-8 shadow-2xl transition-all duration-300 ease-out ${
+                    isMounted ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
+                }`}
                 onClick={(e) => e.stopPropagation()} // Prevent click through to backdrop
             >
                 <button
-                    onClick={onClose}
-                    className="absolute top-4 right-4 rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-black"
+                    onClick={handleClose}
+                    className="absolute top-4 right-4 rounded-full p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-black"
                     aria-label="Close modal"
                 >
                     <svg
@@ -48,7 +77,10 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                     </svg>
                 </button>
 
-                <h2 className="mb-1 text-3xl font-bold text-gray-900">
+                <h2
+                    id={`modal-title-${project.id}`}
+                    className="mb-1 pr-8 text-3xl font-bold text-gray-900"
+                >
                     {project.title}
                 </h2>
                 <div className="mb-6 flex flex-wrap gap-2 text-sm text-gray-500">
