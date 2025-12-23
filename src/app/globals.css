@@ -16,11 +16,6 @@ body {
     color: #374151;
 }
 
-.katex-display {
-    overflow-x: auto;
-    overflow-y: hidden;
-}
-
 .sr-only {
     position: absolute;
     width: 1px;
