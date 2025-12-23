@@ -10,6 +10,7 @@ export interface BlogPost {
     date: string;
     description: string;
     content: string;
+    tags: string[];
 }
 
 export async function getBlogPosts(): Promise<BlogPost[]> {
@@ -29,6 +30,7 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
                 title: data.title,
                 date: data.date,
                 description: data.description,
+                tags: data.tags || [],
                 content,
             };
         })
@@ -48,6 +50,7 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
             title: data.title,
             date: data.date,
             description: data.description,
+            tags: data.tags || [],
             content,
         };
     } catch {
