@@ -2,7 +2,9 @@
 
 import React, { useState } from 'react';
 import { Project } from '@/types/project';
-import ProjectModal from './ProjectModal';
+import dynamic from 'next/dynamic';
+
+const ProjectModal = dynamic(() => import('./ProjectModal'));
 
 const AppleIcon = () => (
     <svg
@@ -78,7 +80,12 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
                                         className="text-sm font-medium text-blue-600 hover:underline"
                                         onClick={(e) => e.stopPropagation()}
                                     >
-                                        View Source &rarr;
+                                        View Source
+                                        <span className="sr-only">
+                                            {' '}
+                                            for {project.title}
+                                        </span>{' '}
+                                        &rarr;
                                     </a>
                                 )}
                                 {project.reportUrl && (
