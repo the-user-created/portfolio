@@ -71,6 +71,22 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
 
                             {/* Action Row */}
                             <div className="mt-3 flex flex-wrap items-center gap-4">
+                                {project.link && (
+                                    <a
+                                        href={project.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-sm font-medium text-blue-600 hover:underline"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        Visit Website
+                                        <span className="sr-only">
+                                            {' '}
+                                            for {project.title}
+                                        </span>{' '}
+                                        &rarr;
+                                    </a>
+                                )}
                                 {project.github && (
                                     <a
                                         href={project.github}

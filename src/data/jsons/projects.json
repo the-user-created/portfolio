@@ -1,5 +1,29 @@
 [
     {
+        "id": "sortpedia",
+        "name": "SortPedia",
+        "title": "SortPedia: The Interactive Sorting Algorithm Encyclopedia",
+        "description": "An interactive encyclopedia for 30+ sorting algorithms, featuring a real-time visualizer, side-by-side racing, and a browser-based performance benchmark engine.",
+        "stack": [
+            "SvelteKit",
+            "Svelte 5 Runes",
+            "TypeScript",
+            "TailwindCSS",
+            "Web Workers",
+            "KaTeX"
+        ],
+        "github": "https://github.com/astraen-dev/sortpedia",
+        "link": "https://sortpedia.com",
+        "overview": "SortPedia is a modern, interactive encyclopedia that bridges the gap between abstract computer science theory and intuitive visual understanding. It allows users to watch, race, and benchmark over 30 sorting algorithms—from industry standards like Quick Sort to esoteric ones like Thanos Sort—directly in the browser, providing a comprehensive educational tool for students and developers.",
+        "objectives": [
+            "Develop an interactive visualizer to render algorithm execution step-by-step, with full playback controls (play, pause, step forward/backward, speed adjust).",
+            "Implement a side-by-side 'Algorithm Racing' feature to visually compare the performance, stability, and access patterns of any two algorithms on identical datasets.",
+            "Build a performance benchmarking tool using Web Workers to run thousands of iterations off the main thread, measuring raw execution time without freezing the UI.",
+            "Create a comprehensive library for each algorithm, complete with LaTeX-rendered complexity analysis, detailed explanations, and clean, copy-pasteable JavaScript implementations."
+        ],
+        "challenges": "The primary technical challenge was capturing the precise state of an algorithm at every critical operation (e.g., a comparison or a swap) to enable step-by-step visualization. This was solved by implementing each sorting algorithm as a JavaScript Generator Function (function*). This approach allowed the sorting logic to yield control back to the visualizer engine at each step, passing a detailed event payload that described the operation performed. This enabled robust and accurate playback, pausing, and stepping capabilities without complex state management or code instrumentation."
+    },
+    {
         "id": "fers-monorepo",
         "name": "FERS (Masters)",
         "title": "The Flexible Extensible Radar Simulator (Masters)",

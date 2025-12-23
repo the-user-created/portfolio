@@ -160,12 +160,22 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                 </div>
 
                 <div className="mt-8 flex flex-wrap items-center gap-4 border-t pt-6">
+                    {project.link && (
+                        <a
+                            href={project.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="rounded bg-black px-4 py-2 font-medium text-white hover:bg-gray-800"
+                        >
+                            Visit Website
+                        </a>
+                    )}
                     {project.github && (
                         <a
                             href={project.github}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="rounded bg-black px-4 py-2 font-medium text-white hover:bg-gray-800"
+                            className="font-medium text-blue-600 hover:underline"
                         >
                             View Source
                         </a>
