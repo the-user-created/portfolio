@@ -1,10 +1,10 @@
-// src/app/blog/[slug]/page.tsx
 import { getBlogPost, getBlogPosts } from '@/lib/blog';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import 'katex/dist/katex.min.css';
 
 type Props = {
     params: Promise<{ slug: string }>;

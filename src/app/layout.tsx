@@ -1,22 +1,8 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
 import { ABOUT, CONTACT } from '@/data/content';
 import { Analytics } from '@vercel/analytics/next';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
 import React from 'react';
-
-const geistSans = Geist({
-    variable: '--font-geist-sans',
-    subsets: ['latin'],
-    display: 'swap',
-});
-
-const geistMono = Geist_Mono({
-    variable: '--font-geist-mono',
-    subsets: ['latin'],
-    display: 'swap',
-});
 
 export const metadata: Metadata = {
     title: 'David Young - Portfolio',
@@ -49,9 +35,7 @@ export default function RootLayout({
     };
     return (
         <html lang="en">
-            <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-            >
+            <body className="antialiased">
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -59,7 +43,6 @@ export default function RootLayout({
                 {children}
 
                 <Analytics />
-                <SpeedInsights />
             </body>
         </html>
     );

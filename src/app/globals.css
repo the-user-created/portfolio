@@ -1,15 +1,10 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
-@theme {
-    --font-sans: var(--font-geist-sans);
-    --font-mono: var(--font-geist-mono);
-}
-
 body {
     background-color: #ffffff;
     color: #1f2937;
-    font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+    font-family: ui-sans-serif, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     min-height: 100vh;
